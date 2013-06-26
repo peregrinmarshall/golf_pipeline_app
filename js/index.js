@@ -1,21 +1,27 @@
 document.addEventListener("deviceready", onDeviceReady, false);
+var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
 
 function onDeviceReady()
 {
-  var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
-  db.transaction(populateDB, errorCB, successCB);
-  $("#login_form").submit( function() { attemptLogin(); });
+  db.transaction(populateQuery, error, populateSuccess);
+  $("#login_form").submit( function(e) { login(); return false; });
+  $("#login_form").validate();
 }
 
-function queryDB(tx)
+function login()
+{
+  db.transaction(loginQuery, error);
+}
+
+function loginQuery(tx)
 {
   user = $("#login_username").val();
   pass = $("#login_password").val();
   query = "SELECT * FROM users where username = '" + user + "' and password = '" + pass + "'";
-  tx.executeSql(query, [], querySuccess, errorCB);
+  tx.executeSql(query, [], loginSuccess, error);
 }
 
-function querySuccess(tx, results)
+function loginSuccess(tx, results)
 {
   var len = results.rows.length;
   if (len == 0)
@@ -24,16 +30,10 @@ function querySuccess(tx, results)
     return false;
   }
   else
-    $.mobile.changePage($('#pagetwo'));
+    $.mobile.changePage($('#home'));
 }
 
-function attemptLogin()
-{
-  var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
-  db.transaction(queryDB, errorCB);
-}
-
-function populateDB(tx)
+function populateQuery(tx)
 {
   tx.executeSql('DROP TABLE IF EXISTS users');
   tx.executeSql('CREATE TABLE IF NOT EXISTS users (id unique, username, password)');
@@ -41,12 +41,19 @@ function populateDB(tx)
   tx.executeSql('INSERT INTO users (id, username, password) VALUES (2, "test2", "4321")');
 }
 
-function errorCB(tx, err)
+function populateSuccess()
+{
+  alert("Fixtures have been created.");
+}
+
+
+// Standard callbacks
+function error(tx, err)
 {
   alert("Error processing SQL: "+err);
 }
 
-function successCB()
+function success()
 {
-  alert("Fixtures have been created.");
+  alert("SQL has processed.");
 }
