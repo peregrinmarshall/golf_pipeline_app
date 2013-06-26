@@ -1,49 +1,52 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+document.addEventListener("deviceready", onDeviceReady, false);
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+function onDeviceReady()
+{
+  var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
+  db.transaction(populateDB, errorCB, successCB);
+  $("#login_form").submit( function() { attemptLogin(); });
+}
 
-        console.log('Received Event: ' + id);
-    }
-};
+function queryDB(tx)
+{
+  user = $("#login_username").val();
+  pass = $("#login_password").val();
+  query = "SELECT * FROM users where username = '" + user + "' and password = '" + pass + "'";
+  tx.executeSql(query, [], querySuccess, errorCB);
+}
+
+function querySuccess(tx, results)
+{
+  var len = results.rows.length;
+  if (len == 0)
+  {
+    $("#login_errors").html("Your username and/or password were incorrect.");
+    return false;
+  }
+  else
+    $.mobile.changePage($('#pagetwo'));
+}
+
+function attemptLogin()
+{
+  var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
+  db.transaction(queryDB, errorCB);
+}
+
+function populateDB(tx)
+{
+  tx.executeSql('DROP TABLE IF EXISTS users');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS users (id unique, username, password)');
+  tx.executeSql('INSERT INTO users (id, username, password) VALUES (1, "test", "1234")');
+  tx.executeSql('INSERT INTO users (id, username, password) VALUES (2, "test2", "4321")');
+}
+
+function errorCB(tx, err)
+{
+  alert("Error processing SQL: "+err);
+}
+
+function successCB()
+{
+  alert("Fixtures have been created.");
+}
