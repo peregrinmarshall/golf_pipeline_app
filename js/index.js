@@ -10,7 +10,7 @@ function onDeviceReady()
   $("#register_form").validate();
   $("#search-times_form").submit( function(e) { searchTimes(); return false; });
   $("#search-times_form").validate();
-  $("#header img").click( function(e) { goHome(); });
+  $(".header img").click( function(e) { goHome(); });
 
   $('a').buttonMarkup({ corners: false });
   $('input[type=submit]').buttonMarkup({ corners: false });
@@ -121,3 +121,4 @@ function success()
 {
   alert("SQL has processed.");
 }
+

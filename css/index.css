@@ -109,12 +109,13 @@ h1 {
   background: url(../img/bg_green.jpg);
 }
 
-#header
+.header.ui-bar-a
 {
-  background: white;
+  background-color: white;
+  background-image: none;
 }
 
-#header img
+.header img
 {
   height: 30px;
   padding: 5px;

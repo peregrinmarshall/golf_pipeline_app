@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=medium-dpi" />
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Golf Pipeline</title>
   </head>
   <body>
@@ -25,40 +25,40 @@
         <div id="login_errors"></div>
         <br /><br />
         <a href="#page_register" data-role="button" data-theme="b">Sign Up for Golf Pipeline</a>
-      </div><!-- /content -->
+      </div>
     </div>
 
     <div data-role="page" id="page_home">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         <a href="#page_search-times" data-role="button" data-theme="b" class="blue_box" style="">Organize a Tee Time</a>
         <a href="#page_upcoming" data-role="button" data-theme="b" class="blue_box with_margin">Upcoming Golf</a>
         <a href="#page_activity" data-role="button" data-theme="b" class="blue_box">View Activity</a>
         <a href="#page_search-courses" data-role="button" data-theme="b" class="blue_box with_margin">Course Lookup</a>
-      </div><!-- /content -->
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer"></div>
+    </div>
+
+    <div data-role="page" id="page_home2">
+      <div data-role="header" data-position="inline" class="header"></div>
+      <div data-role="content">
+        <a href="#page_search-times" data-role="button" data-theme="b" class="blue_box" style="">Organize a Tee Time!</a>
+        <a href="#page_upcoming" data-role="button" data-theme="b" class="blue_box with_margin">Upcoming Golf</a>
+        <a href="#page_activity" data-role="button" data-theme="b" class="blue_box">View Activity</a>
+        <a href="#page_search-courses" data-role="button" data-theme="b" class="blue_box with_margin">Course Lookup</a>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer"></div>
     </div>
 
     <div data-role="page" id="page_social">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         These are social tools.
-      </div><!-- /content -->
+      </div>
     </div>
 
     <div data-role="page" id="page_register">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         <br /><br />
         <center>
@@ -71,57 +71,38 @@
           <input type="submit" value="Register" id="register_submit" data-theme="b" />
         </form>
         <div id="register_errors"></div>
-      </div><!-- /content -->
+      </div>
     </div>
 
     <div data-role="page" id="page_search-courses">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         Search for a course.
       </div>
+      <div data-role="footer" data-position="fixed" class="footer"></div>
     </div>
 
     <div data-role="page" id="page_search-times">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="name" id="search-times_name" class="required" minlength="3" placeholder="Course Name" />
           <input type="submit" value="Search" id="search-times_submit" data-theme="b" />
         </form>
         <div id="search-times_errors"></div>
-      </div><!-- /content -->
-      <div data-role="footer" data-position="fixed">
-        <div data-role="navbar" data-iconpos="top">
-          <a href="#page_social" data-icon="arrow-u" data-transition="slideup">Social</a>
-        </div>
       </div>
+      <div data-role="footer" data-position="fixed" class="footer"></div>
     </div>
  
     <div data-role="page" id="page_result-times">
-      <div data-role="header" data-position="inline" id="header">
-        <center>
-          <img src="./img/logo.png" />
-        </center>
-      </div>
+      <div data-role="header" data-position="inline" class="header"></div>
       <div data-role="content">
         These are courses that match the search.
         <ul id="results_courses">
         </ul>
         <div>
-      </div><!-- /content -->
-      <div data-role="footer" data-position="fixed">
-        <div data-role="navbar" data-iconpos="top">
-          <a href="#page_social" data-icon="arrow-u" data-transition="slideup">Social</a>
-        </div>
       </div>
+      <div data-role="footer" data-position="fixed" class="footer"></div>
     </div>
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -130,6 +111,8 @@
     <script type="text/javascript" src="js/jquery.validate.js"></script>
     <script type="text/javascript" src="js/additional-methods.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/partials.js"></script>
+    <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript">
       app.initialize();
     </script>
