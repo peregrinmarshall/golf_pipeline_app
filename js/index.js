@@ -1,18 +1,20 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
+var token = false;
 
 function onDeviceReady()
 {
   db.transaction(populateQuery, error);
   $("#login_form").submit( function(e) { login(); return false; });
   $("#login_form").validate();
+  $("#update-profile_form").submit( function(e) { updateProfile(); return false; });
+  $("#update-profile_form").validate();
   $("#register_form").submit( function(e) { register(); return false; });
   $("#register_form").validate();
   $("#search-times_form").submit( function(e) { searchTimes(); return false; });
   $("#search-times_form").validate();
   $(".header img").click( function(e) { goHome(); });
 
-  $('a').buttonMarkup({ corners: false });
   $('input[type=submit]').buttonMarkup({ corners: false });
 }
 
@@ -23,7 +25,81 @@ function searchTimes()
 
 function login()
 {
-  db.transaction(loginQuery, error);
+  user = $("#login_username").val();
+  pass = $("#login_password").val();
+  url = "/users/sign_in.json"
+  data = JSON.stringify({ user: { login: user, password: pass } });
+  apiResponse = connect(url, "post", data);
+  if (apiResponse)
+  {
+    $.mobile.changePage($('#page_home'));
+    //alert(JSON.stringify(apiResponse));
+    window.localStorage.setItem("token", apiResponse["authentication_token"]);
+    window.localStorage.setItem("first_name", apiResponse["first_name"]);
+    window.localStorage.setItem("last_name", apiResponse["last_name"]);
+    window.localStorage.setItem("email", apiResponse["email"]);
+    window.localStorage.setItem("password", apiResponse["password"]);
+    window.localStorage.setItem("zip_code", apiResponse["zip_code"]);
+
+    $(".h_first_name").html(window.localStorage.getItem("first_name"));
+    $(".h_last_name").html(window.localStorage.getItem("last_name"));
+    $(".v_first_name").val(window.localStorage.getItem("first_name"));
+    $(".v_last_name").val(window.localStorage.getItem("last_name"));
+  }
+  else
+    $("#login_errors").html("Your username and/or password were incorrect.");
+}
+
+function updateProfile()
+{
+  firstName = $("#profile_first_name").val();
+  lastName = $("#profile_last_name").val();
+  url = "/users.json?auth_token=" + window.localStorage.getItem("token");
+  data = JSON.stringify({ user: {
+    first_name: firstName,
+    last_name: lastName,
+  } });
+  apiResponse = connect(url, "put", data);
+  if (apiResponse)
+  {
+    $.mobile.changePage($('#page_home'));
+    window.localStorage.setItem("first_name", firstName);
+    window.localStorage.setItem("last_name", lastName);
+    $(".h_first_name").html(window.localStorage.getItem("first_name"));
+    $(".h_last_name").html(window.localStorage.getItem("last_name"));
+    $(".v_first_name").val(window.localStorage.getItem("first_name"));
+    $(".v_last_name").val(window.localStorage.getItem("last_name"));
+  }
+  else
+    $("#edit-profile_errors").html("The requested change could not be made.");
+}
+
+function connect(url, type, data)
+{
+  var response = false;
+  var api = $.ajax(
+  {
+    url: "http://www.golfpipelinedemo.com" + url,
+    type: type,
+    data: data,
+    async: false,
+    headers:
+    {
+      "Accept": "application/json",
+      "Content-type": "application/json"
+    },
+    dataType: "json",
+    success: function(feedback)
+    {
+      response = feedback;
+      if (typeof feedback == "undefined")
+        response = true;
+    }
+  }).fail( function(c) {
+    if (c.status != "401")
+      alert(c.status + ": There was an error connecting to the API.");
+  });
+  return response;
 }
 
 function register()
