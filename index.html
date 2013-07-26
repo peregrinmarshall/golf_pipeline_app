@@ -13,7 +13,7 @@
       <div data-role="content">
         <br /><br />
         <center>
-          <img src="/img/logo.png" class="logo" />
+          <img src="./img/logo.png" class="logo" />
         </center>
         <br /><br />
         <form action="" id="login_form" method="get">
@@ -37,6 +37,7 @@
           <a href="#page_activity" data-role="button" data-theme="b" class="blue_box">View Activity</a>
         -->
         <div class="clear"></div>
+        <a href="#page_upcoming_golf" data-role="button" data-theme="b">Upcoming Golf</a>
         <a href="#page_profile" data-role="button" data-theme="b">View/Edit Profile</a>
         <a href="http://www.golfpipeline.com" data-role="button" data-theme="b">Visit mobile site<br />to post recent scores</a>
       </div>
@@ -68,8 +69,22 @@
     <div data-role="page" id="page_social">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        These are social tools.
+        <div id="notifications">
+          These are your notifications.
+          <ul></ul>
+        </div>
       </div>
+    </div>
+
+    <div data-role="page" id="page_upcoming_golf">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="upcoming_golf">
+          These are your upcoming tee times.
+          <ul></ul>
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
 
     <div data-role="page" id="page_options">
@@ -99,7 +114,12 @@
     <div data-role="page" id="page_search-courses">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        Search for a course.
+        <form action="#page_result-courses" id="search-courses_form" method="get">
+          <input type="text" name="center" id="search-courses_location" class="required" minlength="3" placeholder="Location" />
+          <input type="text" name="distance" id="search-courses_distance" class="required" placeholder="Distance" />
+          <input type="submit" value="Search" id="search-courses_submit" data-theme="b" />
+        </form>
+        <div id="search-courses_errors"></div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -108,7 +128,8 @@
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
         <form action="#page_result-times" id="search-times_form" method="get">
-          <input type="text" name="name" id="search-times_name" class="required" minlength="3" placeholder="Course Name" />
+          <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
+          <input type="text" name="distance" id="search-times_distance" class="required" placeholder="Distance" />
           <input type="submit" value="Search" id="search-times_submit" data-theme="b" />
         </form>
         <div id="search-times_errors"></div>
@@ -119,10 +140,28 @@
     <div data-role="page" id="page_result-times">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
+        These are times that match the search.
+        <ul id="results_times">
+        </ul>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_result-courses">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
         These are courses that match the search.
         <ul id="results_courses">
         </ul>
-        <div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_course">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        This is the course show page.<br /><br />
+        <div id="course_details"><i>The details could not be loaded.</i></div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>

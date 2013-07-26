@@ -13,14 +13,65 @@ function onDeviceReady()
   $("#register_form").validate();
   $("#search-times_form").submit( function(e) { searchTimes(); return false; });
   $("#search-times_form").validate();
+  $("#search-courses_form").submit( function(e) { searchCourses(); return false; });
+  $("#search-courses_form").validate();
   $(".header img").click( function(e) { goHome(); });
 
   $('input[type=submit]').buttonMarkup({ corners: false });
+
+  $(document).on("click", ".course_link", function()
+  {
+    slug = $(this).attr("id").replace("course_link_", "");
+    data = {};
+    apiResponse = connect("/courses/" + slug + ".json", "get", data, true);
+    $("#course_details").html("<h2>" + apiResponse.label + "</h2>Latitude: " + apiResponse.lat + "<br />Longitude: " + apiResponse.lon);
+  });
 }
 
 function searchTimes()
-{ 
-  db.transaction(searchTimesQuery, error);
+{
+  center = $("#search-times_location").val();
+  distance = $("#search-times_distance").val();
+  data = { "mobile_time": { "location" : center, "distance": distance } };
+  url = "/search_tee_times/results.json";
+  apiResponse = connect(url, "get", data, true);
+  if (apiResponse)
+  {
+    $.mobile.changePage($('#page_result-times'));
+    $("#results_times").html("");
+    $.each(apiResponse, function(i, val)
+    {
+      times = $("#results_times");
+      times.append('<li>' + val.name + '<ul>');
+      $.each(val.selected, function(i, val)
+      {
+        times.append('<li>' + val.tee_time + '</li>');
+      });
+      times.append('</ul></li>');
+    });
+  }
+  else
+    alert("There was an error.");
+}
+
+function searchCourses()
+{
+  center = $("#search-courses_location").val();
+  distance = $("#search-courses_distance").val();
+  data = { "mobile_course": { "location" : center, "distance": distance } };
+  url = "/courses/search.json";
+  apiResponse = connect(url, "get", data, true);
+  if (apiResponse)
+  {
+    $.mobile.changePage($('#page_result-courses'));
+    $("#results_courses").html("");
+    $.each(apiResponse, function(i, val)
+    {
+      $("#results_courses").append('<li><a href="#page_course" class="course_link" id="course_link_' + val.slug + '">'+ val.label + '</a>)</li>');
+    });
+  }
+  else
+    alert("There was an error.");
 }
 
 function login()
@@ -28,23 +79,36 @@ function login()
   user = $("#login_username").val();
   pass = $("#login_password").val();
   url = "/users/sign_in.json"
-  data = JSON.stringify({ user: { login: user, password: pass } });
-  apiResponse = connect(url, "post", data);
+  data = { user: { login: user, password: pass } };
+  apiResponse = connect(url, "post", data, false);
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
-    //alert(JSON.stringify(apiResponse));
-    window.localStorage.setItem("token", apiResponse["authentication_token"]);
-    window.localStorage.setItem("first_name", apiResponse["first_name"]);
-    window.localStorage.setItem("last_name", apiResponse["last_name"]);
-    window.localStorage.setItem("email", apiResponse["email"]);
-    window.localStorage.setItem("password", apiResponse["password"]);
-    window.localStorage.setItem("zip_code", apiResponse["zip_code"]);
+    window.localStorage.setItem("token", apiResponse.authentication_token);
+    window.localStorage.setItem("first_name", apiResponse.first_name);
+    window.localStorage.setItem("last_name", apiResponse.last_name);
+    window.localStorage.setItem("email", apiResponse.email);
+    window.localStorage.setItem("password", apiResponse.password);
+    window.localStorage.setItem("zip_code", apiResponse.zip_code);
 
     $(".h_first_name").html(window.localStorage.getItem("first_name"));
     $(".h_last_name").html(window.localStorage.getItem("last_name"));
     $(".v_first_name").val(window.localStorage.getItem("first_name"));
     $(".v_last_name").val(window.localStorage.getItem("last_name"));
+
+    data = "";
+    notificationResponse = connect("/notifications.json", "get", data, true);
+    $("#notifications").html("");
+    $.each(notificationResponse, function(i, val)
+    {
+      $("#notifications").append('<li>' + val.message + '</li>');
+    });
+    golfResponse = connect("/tee_times.json", "get", data, true);
+    $("#upcoming_golf").html("");
+    $.each(golfResponse, function(i, val)
+    {
+      $("#upcoming_golf").append('<li>' + val.tee_time + ': ' + val.golfer_count + ' golfers</li>');
+    });
   }
   else
     $("#login_errors").html("Your username and/or password were incorrect.");
@@ -54,12 +118,11 @@ function updateProfile()
 {
   firstName = $("#profile_first_name").val();
   lastName = $("#profile_last_name").val();
-  url = "/users.json?auth_token=" + window.localStorage.getItem("token");
-  data = JSON.stringify({ user: {
+  data = { user: {
     first_name: firstName,
-    last_name: lastName,
-  } });
-  apiResponse = connect(url, "put", data);
+    last_name: lastName
+  } };
+  apiResponse = connect("/users.json", "put", data, true);
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
@@ -74,15 +137,25 @@ function updateProfile()
     $("#edit-profile_errors").html("The requested change could not be made.");
 }
 
-function connect(url, type, data)
+function connect(url, type, data, sendToken)
 {
   var response = false;
+  if (window.localStorage.getItem("token") && typeof data !== "undefined" && sendToken)
+    data["auth_token"] = window.localStorage.getItem("token");
+  if (type == "get")
+  {
+    data = $.param(data);
+    url = url + "?" + data;
+  }
+  else
+    data = JSON.stringify(data);
   var api = $.ajax(
   {
     url: "http://www.golfpipelinedemo.com" + url,
     type: type,
-    data: data,
+    traditional: true,
     async: false,
+    data: data,
     headers:
     {
       "Accept": "application/json",
