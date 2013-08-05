@@ -22,8 +22,10 @@
           <input type="submit" value="Log In" id="login_submit" data-theme="b" />
         </form>
         <div id="login_errors"></div>
+        <!--
         <br /><br />
         <a href="#page_register" data-role="button" data-theme="b">Sign Up for Golf Pipeline</a>
+        -->
       </div>
     </div>
 
@@ -69,8 +71,8 @@
     <div data-role="page" id="page_social">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
+        These are your notifications.
         <div id="notifications">
-          These are your notifications.
           <ul></ul>
         </div>
       </div>
@@ -127,10 +129,13 @@
     <div data-role="page" id="page_search-times">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
+        <div class="ui-bar ui-bar-b gp_header">
+          Search Tee Times
+        </div>
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
           <input type="text" name="distance" id="search-times_distance" class="required" placeholder="Distance" />
-          <input type="submit" value="Search" id="search-times_submit" data-theme="b" />
+          <input type="submit" value="Search" id="search-times_submit" class="gp_submit" data-theme="b" />
         </form>
         <div id="search-times_errors"></div>
       </div>
@@ -140,9 +145,11 @@
     <div data-role="page" id="page_result-times">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        These are times that match the search.
-        <ul id="results_times">
-        </ul>
+        <div class="ui-bar ui-bar-b gp_header">
+          Search Results
+        </div>
+        <div id="results_times">
+        </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>

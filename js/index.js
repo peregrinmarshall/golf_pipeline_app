@@ -15,7 +15,6 @@ function onDeviceReady()
   $("#search-times_form").validate();
   $("#search-courses_form").submit( function(e) { searchCourses(); return false; });
   $("#search-courses_form").validate();
-  $(".header img").click( function(e) { goHome(); });
 
   $('input[type=submit]').buttonMarkup({ corners: false });
 
@@ -41,13 +40,16 @@ function searchTimes()
     $("#results_times").html("");
     $.each(apiResponse, function(i, val)
     {
-      times = $("#results_times");
-      times.append('<li>' + val.name + '<ul>');
+      h = '<div class="result_time_course"><h3>' + val.name + '</h3><div class="result_time_openings">';
       $.each(val.selected, function(i, val)
       {
-        times.append('<li>' + val.tee_time + '</li>');
+        h = h + '<div><center>' + val.tee_time.substring(11,16);
+        h = h + '<br />' + val.rate;
+        h = h + '</center></div>';
       });
-      times.append('</ul></li>');
+      h = h + '<br class="clear" /><br /></div></div>';
+      times = $("#results_times");
+      times.append(h);
     });
   }
   else
@@ -234,11 +236,6 @@ function searchTimesSuccess(tx, results)
     }
     $.mobile.changePage($('#page_result-times'));
   }
-}
-
-function goHome()
-{
-  $.mobile.changePage($('#page_login'));
 }
 
 function populateQuery(tx)

@@ -115,9 +115,9 @@ h1 {
   background-image: none;
 }
 
-.header img
+.header img.mini_logo
 {
-  width: 30%;
+  width: 40%;
   padding: 5px;
 }
 
@@ -164,24 +164,62 @@ h1 {
   height: 17px;
   line-height: 20px;
   overflow: hidden;
-  width: 5000px;
+  width: 1000%;
   left: 155px;
+  float: left;
+  margin: 0px;
 }
 
 .nav_strip ul li
 {
   float: left;
   text-align: center;
-  width: 125px;
+  width: 5%;
 }
 
 #white_arrow
 {
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  top: 4px;
 }
 
 input
 {
   -webkit-user-select: auto !important;
+}
+
+.ui-bar.gp_header,
+.ui-btn.gp_submit
+{
+  text-transform: none;
+  font-weight: normal;
+  text-align: center;
+}
+
+#result_time_course h3
+{
+  color: #268ACC;
+  text-transform: none;
+}
+
+.result_time_course
+{
+  border-width: 0px 0px 1px 0px;
+  border-color: #C3C3C3;
+  border-style: dotted;
+  clear: left;
+}
+
+.result_time_openings div
+{
+  width: 65px;
+  height: 40px;
+  background-image: url(../img/bg_time.png);
+  float: left;
+  margin: 0px 10px 10px 0px;
+  color: white;
+  font-size: 12px;
+  line-height: 21px;
 }
