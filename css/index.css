@@ -124,7 +124,6 @@ h1 {
 .blue_box
 {
   width: 48%;
-  height: 100px;
   float: left;
   font-size: 12px;
 }
@@ -212,14 +211,62 @@ input
   clear: left;
 }
 
-.result_time_openings div
+.result_time_openings a
 {
+  display: block;
   width: 65px;
   height: 40px;
   background-image: url(../img/bg_time.png);
   float: left;
   margin: 0px 10px 10px 0px;
-  color: white;
+  color: white !important;
   font-size: 12px;
   line-height: 21px;
+  text-decoration: none;
+  font-weight: normal !important; 
+}
+
+#profile_thumb
+{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#profile_button .ui-btn-inner
+{
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+body
+{
+  text-transform: none !important;
+}
+
+#page_home .ui-btn-up-b
+{
+  font-weight: normal;
+}
+
+#page_home .blue_box img
+{
+  width: 48%;
+}
+
+.upcoming_golf_block
+{
+  font-weight: normal;
+  font-size: 12px;
+}
+
+#big_picture_box img
+{
+  width: 100%;
+}
+
+#page_profile table
+{
+  width: 60%;
+  margin: 5% 20%;
 }

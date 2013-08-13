@@ -1,10 +1,13 @@
 document.addEventListener("deviceready", onDeviceReady, false);
-var db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
+
+//window.localStorage.setItem("remote_url", "http://localhost:3000");
+
+window.localStorage.setItem("remote_url", "http://www.golfpipelinedemo.com");
+
 var token = false;
 
 function onDeviceReady()
 {
-  db.transaction(populateQuery, error);
   $("#login_form").submit( function(e) { login(); return false; });
   $("#login_form").validate();
   $("#update-profile_form").submit( function(e) { updateProfile(); return false; });
@@ -15,8 +18,23 @@ function onDeviceReady()
   $("#search-times_form").validate();
   $("#search-courses_form").submit( function(e) { searchCourses(); return false; });
   $("#search-courses_form").validate();
+  $(document).on("submit", "#payment_form", function(e) { bookTime(); return false; });
+  $("#payment_form").validate();
 
   $('input[type=submit]').buttonMarkup({ corners: false });
+
+  $(".mini_logo").click( function() {
+    $(".nav_strip ul").css("left", "-35%");
+  });
+
+  $(document).on("click", ".tee_link", function()
+  {
+    tt_id = $(this).attr("id").split("_")[2];
+    c_id = $(this).attr("id").split("_")[3];
+    r = connect("/courses/" + c_id + ".json", "get", data, true);
+    course = new Course(r);
+    new TimeView({ el: $("#tee_holder"), course: course });
+  });
 
   $(document).on("click", ".course_link", function()
   {
@@ -25,46 +43,92 @@ function onDeviceReady()
     apiResponse = connect("/courses/" + slug + ".json", "get", data, true);
     $("#course_details").html("<h2>" + apiResponse.label + "</h2>Latitude: " + apiResponse.lat + "<br />Longitude: " + apiResponse.lon);
   });
+
+  $(document).on("click", "#payment_builder", function()
+  {
+    console.log(slots[tt_id]);
+    new PaymentView({ el: $("#payment_holder"), user: currentUser, slot: slots[tt_id] });
+  });
 }
 
 function searchTimes()
 {
   center = $("#search-times_location").val();
   distance = $("#search-times_distance").val();
+  //center = "80211";
+  //distance = "2000";
   data = { "mobile_time": { "location" : center, "distance": distance } };
   url = "/search_tee_times/results.json";
   apiResponse = connect(url, "get", data, true);
   if (apiResponse)
   {
+    timeResults = new TimeResults(apiResponse);
+    new TimeResultsView({ el: $("#results_times"), time_results: timeResults });
     $.mobile.changePage($('#page_result-times'));
-    $("#results_times").html("");
-    $.each(apiResponse, function(i, val)
-    {
-      h = '<div class="result_time_course"><h3>' + val.name + '</h3><div class="result_time_openings">';
-      $.each(val.selected, function(i, val)
-      {
-        h = h + '<div><center>' + val.tee_time.substring(11,16);
-        h = h + '<br />' + val.rate;
-        h = h + '</center></div>';
-      });
-      h = h + '<br class="clear" /><br /></div></div>';
-      times = $("#results_times");
-      times.append(h);
-    });
   }
   else
     alert("There was an error.");
 }
 
+function bookTime()
+{
+  first_name = $("#payment_first-name").val();
+  last_name  = $("#payment_last-name").val();
+  email      = $("#payment_email").val();
+  phone      = $("#payment_phone").val();
+  number     = $("#payment_number").val();
+  month      = $("#payment_month").val();
+  year       = $("#payment_year").val();
+  //phone      = "123-456-7890";
+  //number     = "4111111111111111";
+  //month      = "06";
+  //year       = "2017";
+  formattedTeeTime = new Date(slots[tt_id].tee_time);
+  console.log(formattedTeeTime);
+  data = {
+    "search_tee_time"  : {
+      "first_name"     : first_name,
+      "last_name"      : last_name,
+      "email"          : email,
+      "phone_number"   : phone,
+      "cc_number"      : number,
+      "cc_exp_month"   : month,
+      "cc_exp_year"    : year,
+      "user_id"        : currentUser.get("id"),
+      "booking"        : "1",
+      "golfer_count"   : "4",
+      "tee_time"       : "2013-08-13 14:49:00 UTC",
+      "play_course_id" : slots[tt_id].play_course_id,
+      "save_address"   : 0,
+      "line_1"         : "123 Main Street",
+      "city"           : "Anytown",
+      "state"          : "CO",
+      "zip"            : "80211"
+    }
+  };
+
+  url = "/search_tee_times/results.json";
+  apiResponse = connect(url, "put", data, true);
+  if (apiResponse)
+  {
+    alert("ok");
+  }
+  else
+    alert("There was an error."); 
+}
+
 function searchCourses()
 {
-  center = $("#search-courses_location").val();
-  distance = $("#search-courses_distance").val();
+  center = "80211";//$("#search-courses_location").val();
+  distance = "1000";//$("#search-courses_distance").val();
   data = { "mobile_course": { "location" : center, "distance": distance } };
   url = "/courses/search.json";
   apiResponse = connect(url, "get", data, true);
   if (apiResponse)
   {
+    collection = new Courses(apiResponse);
+    alert(collection.toJSON());
+    alert(collection.at(1).get("label"));
     $.mobile.changePage($('#page_result-courses'));
     $("#results_courses").html("");
     $.each(apiResponse, function(i, val)
@@ -85,32 +149,22 @@ function login()
   apiResponse = connect(url, "post", data, false);
   if (apiResponse)
   {
+    currentUser = new User(apiResponse);
     $.mobile.changePage($('#page_home'));
-    window.localStorage.setItem("token", apiResponse.authentication_token);
-    window.localStorage.setItem("first_name", apiResponse.first_name);
-    window.localStorage.setItem("last_name", apiResponse.last_name);
-    window.localStorage.setItem("email", apiResponse.email);
-    window.localStorage.setItem("password", apiResponse.password);
-    window.localStorage.setItem("zip_code", apiResponse.zip_code);
-
-    $(".h_first_name").html(window.localStorage.getItem("first_name"));
-    $(".h_last_name").html(window.localStorage.getItem("last_name"));
-    $(".v_first_name").val(window.localStorage.getItem("first_name"));
-    $(".v_last_name").val(window.localStorage.getItem("last_name"));
-
+    thumbURL = window.localStorage.getItem("remote_url") + currentUser.get("image_thumb");
+    imageURL = window.localStorage.getItem("remote_url") + currentUser.get("image_url");
+    $("#big_picture_box").html('<img src="' + imageURL + '" />');
+    $("#profile_button .ui-btn-inner").css("background-image", "url(" + thumbURL + ")");
     data = "";
-    notificationResponse = connect("/notifications.json", "get", data, true);
-    $("#notifications").html("");
-    $.each(notificationResponse, function(i, val)
-    {
-      $("#notifications").append('<li>' + val.message + '</li>');
-    });
-    golfResponse = connect("/tee_times.json", "get", data, true);
-    $("#upcoming_golf").html("");
-    $.each(golfResponse, function(i, val)
-    {
-      $("#upcoming_golf").append('<li>' + val.tee_time + ': ' + val.golfer_count + ' golfers</li>');
-    });
+
+    notifications = new Notifications(connect("/notifications.json", "get", data, true));
+    $(".notification_count").html(notifications.length);
+    if (notifications.length == 1)
+      $(".notification_plural").hide();
+    new NotificationsView({ el: $("#notifications_holder"), notifications: notifications });
+
+    tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
+    new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
   }
   else
     $("#login_errors").html("Your username and/or password were incorrect.");
@@ -128,143 +182,8 @@ function updateProfile()
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
-    window.localStorage.setItem("first_name", firstName);
-    window.localStorage.setItem("last_name", lastName);
-    $(".h_first_name").html(window.localStorage.getItem("first_name"));
-    $(".h_last_name").html(window.localStorage.getItem("last_name"));
-    $(".v_first_name").val(window.localStorage.getItem("first_name"));
-    $(".v_last_name").val(window.localStorage.getItem("last_name"));
+    currentUser.set({ first_name: firstName });
   }
   else
     $("#edit-profile_errors").html("The requested change could not be made.");
 }
-
-function connect(url, type, data, sendToken)
-{
-  var response = false;
-  if (window.localStorage.getItem("token") && typeof data !== "undefined" && sendToken)
-    data["auth_token"] = window.localStorage.getItem("token");
-  if (type == "get")
-  {
-    data = $.param(data);
-    url = url + "?" + data;
-  }
-  else
-    data = JSON.stringify(data);
-  var api = $.ajax(
-  {
-    url: "http://www.golfpipelinedemo.com" + url,
-    type: type,
-    traditional: true,
-    async: false,
-    data: data,
-    headers:
-    {
-      "Accept": "application/json",
-      "Content-type": "application/json"
-    },
-    dataType: "json",
-    success: function(feedback)
-    {
-      response = feedback;
-      if (typeof feedback == "undefined")
-        response = true;
-    }
-  }).fail( function(c) {
-    if (c.status != "401")
-      alert(c.status + ": There was an error connecting to the API.");
-  });
-  return response;
-}
-
-function register()
-{
-  db.transaction(registerQuery, error);
-}
-
-function loginQuery(tx)
-{
-  user = $("#login_username").val();
-  pass = $("#login_password").val();
-  query = "select * from users where username = '" + user + "' and password = '" + pass + "'";
-  tx.executeSql(query, [], loginSuccess, error);
-}
-
-function searchTimesQuery(tx)
-{
-  course_name = $("#search-times_name").val();
-  query = "select * from courses where name like '%" + course_name + "%'";
-  tx.executeSql(query, [], searchTimesSuccess, error);
-}
-
-function registerQuery(tx)
-{
-  user  = $("#register_username").val();
-  pass  = $("#register_password").val();
-  query = "insert into users (username, password) values ('" + user + "', '" + pass + "')";
-  alert(query);
-  tx.executeSql(query);
-}
-
-function loginSuccess(tx, results)
-{
-  var len = results.rows.length;
-  if (len == 0)
-  {
-    $("#login_errors").html("Your username and/or password were incorrect.");
-    return false;
-  }
-  else
-    $.mobile.changePage($('#page_home'));
-}
-
-function searchTimesSuccess(tx, results)
-{
-  var len = results.rows.length;
-  if (len == 0)
-  {
-    $("#search-times_errors").html("No courses were found.");
-    return false;
-  }
-  else
-  {
-    $("#results_courses").html("");
-    for (var i=0; i<len; i++)
-    {
-      courseHTML = "<li>" + results.rows.item(i).name + "</li>";
-      $("#results_courses").append(courseHTML);
-    }
-    $.mobile.changePage($('#page_result-times'));
-  }
-}
-
-function populateQuery(tx)
-{
-  tx.executeSql('drop table if exists users');
-  tx.executeSql('create table if not exists users (id unique, username, password)');
-  tx.executeSql('insert into users (id, username, password) values (1, "test", "1234")');
-  tx.executeSql('insert into users (id, username, password) values (2, "test2", "4321")');
-
-  tx.executeSql('drop table if exists courses');
-  tx.executeSql('create table if not exists courses (id unique, name)');
-  tx.executeSql('insert into courses (id, name) values (1, "St. Andrews")');
-  tx.executeSql('insert into courses (id, name) values (2, "Pebble Beach")');
-}
-
-function populateSuccess()
-{
-  alert("Fixtures have been created.");
-}
-
-
-// Standard callbacks
-function error(tx, error_message)
-{
-  alert("Error processing SQL: " + error_message);
-}
-
-function success()
-{
-  alert("SQL has processed.");
-}
-

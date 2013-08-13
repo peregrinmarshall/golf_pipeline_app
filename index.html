@@ -32,16 +32,16 @@
     <div data-role="page" id="page_home">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        <a href="#page_search-times" data-role="button" data-theme="b" class="blue_box" style="">Organize a Tee Time</a>
-        <a href="#page_search-courses" data-role="button" data-theme="b" class="blue_box with_margin">Course Lookup</a>
+        <a href="#page_search-times" data-role="button" data-theme="b" data-corners="false" class="blue_box" style=""><img src="./img/icon_clock.png" /><br />Organize a Tee Time</a>
         <!--
+        <a href="#page_search-courses" data-role="button" data-theme="b" class="blue_box with_margin">Course Lookup</a>
           <a href="#page_upcoming" data-role="button" data-theme="b" class="blue_box with_margin">Upcoming Golf</a>
           <a href="#page_activity" data-role="button" data-theme="b" class="blue_box">View Activity</a>
         -->
+        <a href="#page_upcoming_golf" data-role="button" data-theme="b" data-corners="false" class="blue_box with_margin"><img src="./img/icon_calendar.png" /><br />Upcoming Golf</a>
         <div class="clear"></div>
-        <a href="#page_upcoming_golf" data-role="button" data-theme="b">Upcoming Golf</a>
-        <a href="#page_profile" data-role="button" data-theme="b">View/Edit Profile</a>
-        <a href="http://www.golfpipeline.com" data-role="button" data-theme="b">Visit mobile site<br />to post recent scores</a>
+        <a href="#page_profile" data-role="button" data-theme="b" data-corners="false" id="profile_button">View/Edit Profile</a>
+        <a href="http://www.golfpipeline.com" data-role="button" data-theme="b" data-corners="false">Visit mobile site<br />to post recent scores</a>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -49,11 +49,21 @@
     <div data-role="page" id="page_profile">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        This is your profile.<br /><br />
-        First Name: <span class="h_first_name"></span><br />
-        Last Name: <span class="h_last_name"></span>
-        <a href="#page_edit-profile" data-role="button" data-theme="b">Edit Profile</a>
+        <div id="big_picture_box"></div>
+        <div class="ui-bar ui-bar-b gp_header">
+          Details
+        </div>
+        <table>
+          <tr>
+            <td>First Name</td><td><span class="h_first_name"></span></td>
+          </tr>
+          <tr>
+            <td>Last Name</td><td><span class="h_last_name"></span></td>
+          </tr>
+        </table>
+        <a href="#page_edit-profile" data-role="button" data-theme="b" data-corners="false">Edit Profile</a>
       </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
 
     <div data-role="page" id="page_edit-profile">
@@ -71,9 +81,7 @@
     <div data-role="page" id="page_social">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        These are your notifications.
-        <div id="notifications">
-          <ul></ul>
+        <div id="notifications_holder">
         </div>
       </div>
     </div>
@@ -81,9 +89,7 @@
     <div data-role="page" id="page_upcoming_golf">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        <div id="upcoming_golf">
-          These are your upcoming tee times.
-          <ul></ul>
+        <div id="tee-times_holder">
         </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
@@ -173,14 +179,46 @@
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
 
+    <div data-role="page" id="page_tee">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="tee_holder">
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_payment">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="payment_holder">
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_result-payment">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div class="ui-bar ui-bar-b gp_header">
+          Payment Result
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery-1.10.1.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.3.1.js"></script>
     <script type="text/javascript" src="js/jquery.validate.js"></script>
+    <script type="text/javascript" src="js/underscore-min.js"></script>
+    <script type="text/javascript" src="js/backbone-min.js"></script>
     <script type="text/javascript" src="js/additional-methods.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/models.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/partials.js"></script>
     <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
     $(document).ready( function()
     {
@@ -189,3 +227,87 @@
     </script>
   </body>
 </html>
+
+<script type="text/template" id="time-results_template">
+  <% slots = new Array(); %>
+  <% time_results.each(function(tee_time) { %>
+    <div class="result_time_course">
+      <h3><%- tee_time.get("name") %></h3>
+      <div class="result_time_openings">
+        <% _.each(tee_time.get("selected"), function(slot) { %>
+          <% slots[slot.id] = slot %>
+          <a href="#page_tee" class="tee_link" id="tee_link_<%- slot.id %>_<%- slot.course_id %>">
+            <center>
+              <%- slot.tee_time.substring(11,16) %>
+              <br />
+              <%- slot.rate %>
+            </center>
+          </a>
+        <% }); %>
+        <br class="clear" />
+        <br />
+      </div>
+    </div>
+  <% }); %>
+</script>
+
+<script type="text/template" id="time_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Tee Time Details
+  </div>
+  <h3><%- course.get("label") %></h3>
+  <%- course.get("address") %>
+  <a href="#page_payment"><button id="payment_builder">Next</button></a>
+</script>
+
+<script type="text/template" id="payment_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Payment Details
+  </div>
+  <form action="#page_result-payment" id="payment_form" method="get">
+    <input type="text" name="center" id="payment_first-name" class="required" minlength="3" placeholder="First Name" value="<%- user.get('first_name') %>" />
+    <input type="text" name="center" id="payment_last-name" class="required" minlength="3" placeholder="Last Name" value="<%- user.get('last_name') %>" />
+    <input type="text" name="center" id="payment_email" class="required" minlength="3" placeholder="Email" value="<%- user.get('email') %>" />
+    <input type="text" name="center" id="payment_phone" class="required" minlength="3" placeholder="Phone #" value="<%- user.get('phone') %>" />
+    <input type="text" name="center" id="payment_number" class="required" minlength="3" placeholder="Credit Card #" />
+    <input type="text" name="center" id="payment_month" class="required" minlength="3" placeholder="Exp. Month" />
+    <input type="text" name="center" id="payment_year" class="required" minlength="3" placeholder="Exp. Year" />
+    <input type="submit" value="Book It" />
+  </form>
+</script>
+
+<script type="text/template" id="notifications_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Notifications
+  </div>
+  <% if (notifications.length > 0) { %>
+    <% notifications.each(function(notification) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header">
+        <%- notification.get("message") %>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no notifications.</i>
+  <% } %>
+</script>
+
+<script type="text/template" id="tee-times_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Upcoming Golf
+  </div>
+  <% if (tee_times.length > 0) { %>
+    <% tee_times.each(function(tee_time) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header" class="upcoming_golf_block">
+        <%- tee_time.get("pretty_time") %><br />
+        <%- tee_time.get("course_name") %><br />
+        <%- tee_time.get("holes") %> Holes | <%- tee_time.get("rate") %> Per Player
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no upcoming golf.</i>
+  <% } %>
+</script>
