@@ -8,8 +8,8 @@ var map   = false;
 
 function onDeviceReady()
 {
-  $("#login_form").submit( function(e) { login(); return false; });
   $("#login_form").validate();
+  $("#login_form").submit( function(e) { login(); return false; });
   $("#update-profile_form").submit( function(e) { updateProfile(); return false; });
   $("#update-profile_form").validate();
   $("#register_form").submit( function(e) { register(); return false; });
@@ -57,11 +57,22 @@ function onDeviceReady()
 
 function searchTimes()
 {
-  center = $("#search-times_location").val();
-  distance = $("#search-times_distance").val();
-  center = "80211";
-  distance = "2000";
-  data = { "mobile_time": { "location" : center, "distance": distance } };
+  data = { "mobile_time": {
+    "location":     $("#search-times_location").val(),
+    "distance":     $("#search-times_distance").val(),
+    "date":         $("#search-times_date").val(),
+    "time":         $("#search-times_time").val(),
+    "golfer_count": $("#search-times_golfer-count").val()
+    //"location":     "80211",
+    //"distance":     "1234",
+    //"date":         "22 August, 2013",
+    //"time":         "2:00 PM",
+    //"golfer_count": "4"
+  }};
+
+  if (!$("#search-times_form").valid())
+    return false;
+
   url = "/search_tee_times/results.json";
   apiResponse = connect(url, "get", data, true);
   if (apiResponse)
@@ -76,28 +87,17 @@ function searchTimes()
 
 function bookTime()
 {
-  first_name = $("#payment_first-name").val();
-  last_name  = $("#payment_last-name").val();
-  email      = $("#payment_email").val();
-  phone      = $("#payment_phone").val();
-  number     = $("#payment_number").val();
-  month      = $("#payment_month").val();
-  year       = $("#payment_year").val();
-  //phone      = "123-456-7890";
-  //number     = "4111111111111111";
-  //month      = "06";
-  //year       = "2017";
   formattedTeeTime = new Date(slots[tt_id].tee_time);
   console.log(formattedTeeTime);
   data = {
     "search_tee_time"  : {
-      "first_name"     : first_name,
-      "last_name"      : last_name,
-      "email"          : email,
-      "phone_number"   : phone,
-      "cc_number"      : number,
-      "cc_exp_month"   : month,
-      "cc_exp_year"    : year,
+      "first_name"     : $("#payment_first-name").val(),
+      "last_name"      : $("#payment_last-name").val(),
+      "email"          : $("#payment_email").val(),
+      "phone_number"   : $("#payment_phone").val(),
+      "cc_number"      : $("#payment_number").val(),
+      "cc_exp_month"   : $("#payment_month").val(),
+      "cc_exp_year"    : $("#payment_year").val(),
       "user_id"        : currentUser.get("id"),
       "booking"        : "1",
       "golfer_count"   : "4",
@@ -115,7 +115,13 @@ function bookTime()
   apiResponse = connect(url, "put", data, true);
   if (apiResponse)
   {
-    alert("ok");
+    if (apiResponse.errors == "Sorry, that tee time no longer exists.")
+    {
+      $.mobile.changePage($('#page_search-times'));
+      $("#page_search-times .errors").html("Sorry, that tee time no longer exists.").show();
+    }
+    else
+      alert("Success!");
   }
   else
     alert("There was an error."); 
@@ -131,8 +137,6 @@ function searchCourses()
   if (apiResponse)
   {
     collection = new Courses(apiResponse);
-    alert(collection.toJSON());
-    alert(collection.at(1).get("label"));
     $.mobile.changePage($('#page_result-courses'));
     $("#results_courses").html("");
     $.each(apiResponse, function(i, val)
@@ -146,11 +150,19 @@ function searchCourses()
 
 function login()
 {
-  user = $("#login_username").val();
-  pass = $("#login_password").val();
+  data = { user: {
+    login: $("#login_username").val(),
+    password: $("#login_password").val()
+    //login: "perejunk@yahoo.com",
+    //password: "acgaff"
+  }};
+
+  if (!$("#login_form").valid())
+    return false;
+
   url = "/users/sign_in.json"
-  data = { user: { login: user, password: pass } };
   apiResponse = connect(url, "post", data, false);
+
   if (apiResponse)
   {
     currentUser = new User(apiResponse);

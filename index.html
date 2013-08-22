@@ -22,7 +22,7 @@
         <br /><br />
         <form action="" id="login_form" method="get">
           <input type="text" name="username" id="login_username" class="required" placeholder="Username" />
-          <input type="text" name="password" id="login_password" placeholder="Password" />
+          <input type="text" class="required" name="password" id="login_password" placeholder="Password" />
           <input type="submit" value="Log In" id="login_submit" data-theme="b" />
         </form>
         <div id="login_errors"></div>
@@ -142,12 +142,18 @@
         <div class="ui-bar ui-bar-b gp_header">
           Search Tee Times
         </div>
+        <div class="errors hidden"></div>
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
           <input type="text" name="distance" id="search-times_distance" class="required" placeholder="Distance" />
           <input type="text" name="date" id="search-times_date" class="required datepicker" placeholder="Date" />
           <input type="text" name="time" id="search-times_time" class="required timepicker" placeholder="Time" />
-          <input type="text" name="golfer-count" id="search-times_golfer-count" class="required" placeholder="Golfer Count" />
+          <select name="golfer-count" id="search-times_golfer-count" class="required" placeholder="Golfer Count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
           <input type="submit" value="Search" id="search-times_submit" class="gp_submit" data-theme="b" />
         </form>
         <div id="search-times_errors"></div>
@@ -190,6 +196,15 @@
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
         <div id="tee_holder">
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_time">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="time_holder">
         </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>

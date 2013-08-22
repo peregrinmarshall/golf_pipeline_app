@@ -281,3 +281,14 @@ body
 {
   margin-top: 5px;
 }
+
+.errors
+{
+  color: red;
+  padding: 10px;
+}
+
+.hidden
+{
+  display: none;
+}
