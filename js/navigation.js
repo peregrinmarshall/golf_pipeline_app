@@ -32,6 +32,7 @@ $(document).ready( function()
       offset = "-35";
 
     $(".nav_strip ul").css("left", offset + "%");
+    setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 
 });

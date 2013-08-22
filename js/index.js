@@ -1,10 +1,10 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 
+window.localStorage.setItem("remote_url", "http://www.golfpipelinedemo.com");
 //window.localStorage.setItem("remote_url", "http://localhost:3000");
 
-window.localStorage.setItem("remote_url", "http://www.golfpipelinedemo.com");
-
 var token = false;
+var map   = false;
 
 function onDeviceReady()
 {
@@ -34,6 +34,7 @@ function onDeviceReady()
     r = connect("/courses/" + c_id + ".json", "get", data, true);
     course = new Course(r);
     new TimeView({ el: $("#tee_holder"), course: course });
+    mapCoords(course.get("lat"), course.get("lon"));
   });
 
   $(document).on("click", ".course_link", function()
@@ -49,14 +50,16 @@ function onDeviceReady()
     console.log(slots[tt_id]);
     new PaymentView({ el: $("#payment_holder"), user: currentUser, slot: slots[tt_id] });
   });
+
+  $(".datepicker").datepicker();
 }
 
 function searchTimes()
 {
   center = $("#search-times_location").val();
   distance = $("#search-times_distance").val();
-  //center = "80211";
-  //distance = "2000";
+  center = "80211";
+  distance = "2000";
   data = { "mobile_time": { "location" : center, "distance": distance } };
   url = "/search_tee_times/results.json";
   apiResponse = connect(url, "get", data, true);
@@ -186,4 +189,29 @@ function updateProfile()
   }
   else
     $("#edit-profile_errors").html("The requested change could not be made.");
+}
+
+google.maps.event.addDomListener(window, 'load', setup); 
+
+function setup() {
+    // wait for PhoneGap to load
+    document.addEventListener("deviceready", onDeviceReady, false);
+        
+    function onDeviceReady() {
+        // get device's geographical location and return it as a Position object (which is then passed to onSuccess)
+        //navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
+}
+
+function mapCoords(lat,lon) { 
+    var myLocation = new google.maps.LatLng(lat,lon);
+
+    map  = new google.maps.Map(document.getElementById('map'), {
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: myLocation,
+    zoom: 15
+    });
+}
+
+function onError(position) { 
 }

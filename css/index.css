@@ -270,3 +270,14 @@ body
   width: 60%;
   margin: 5% 20%;
 }
+
+#map
+{
+  width: 100%;
+  height: 300px;
+}
+
+#ratings img
+{
+  margin-top: 5px;
+}

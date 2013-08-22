@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Golf Pipeline</title>
@@ -141,6 +142,9 @@
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
           <input type="text" name="distance" id="search-times_distance" class="required" placeholder="Distance" />
+          <input type="text" name="date" id="search-times_date" class="required datepicker" placeholder="Date" />
+          <input type="text" name="time" id="search-times_time" class="required" placeholder="Time" />
+          <input type="text" name="golfer-count" id="search-times_golfer-count" class="required" placeholder="Distance" />
           <input type="submit" value="Search" id="search-times_submit" class="gp_submit" data-theme="b" />
         </form>
         <div id="search-times_errors"></div>
@@ -210,10 +214,12 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery-1.10.1.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.3.1.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
     <script type="text/javascript" src="js/jquery.validate.js"></script>
     <script type="text/javascript" src="js/underscore-min.js"></script>
     <script type="text/javascript" src="js/backbone-min.js"></script>
     <script type="text/javascript" src="js/additional-methods.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
     <script type="text/javascript" src="js/models.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/partials.js"></script>
@@ -256,7 +262,20 @@
     Tee Time Details
   </div>
   <h3><%- course.get("label") %></h3>
+  <div id="ratings">
+    User Rating:
+    <% for (var i=0;i<course.get("user_rating");i++) { %>
+      <img src="./img/star.png" />
+    <% } %>
+    <br />
+    Critic Rating:
+    <% for (var i=0;i<course.get("critic_rating");i++) { %>
+      <img src="./img/diamond.png" />
+    <% } %>
+  </div>
+  <br /><br />
   <%- course.get("address") %>
+  <div id="map"></div>
   <a href="#page_payment"><button id="payment_builder">Next</button></a>
 </script>
 
