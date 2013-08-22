@@ -51,7 +51,8 @@ function onDeviceReady()
     new PaymentView({ el: $("#payment_holder"), user: currentUser, slot: slots[tt_id] });
   });
 
-  $(".datepicker").datepicker();
+  $(".datepicker").pickadate();
+  $(".timepicker").pickatime();
 }
 
 function searchTimes()
