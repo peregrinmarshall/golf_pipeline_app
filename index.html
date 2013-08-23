@@ -93,6 +93,10 @@
     <div data-role="page" id="page_upcoming_golf">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
+        <div class="ui-bar ui-bar-b gp_header">
+          Upcoming Golf
+        </div>
+        <div class="alerts"></div>
         <div id="tee-times_holder">
         </div>
       </div>
@@ -146,6 +150,14 @@
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
           <input type="text" name="distance" id="search-times_distance" class="required" placeholder="Distance" />
+          <select name="distance" id="search-times_distance" class="required" placeholder="Golfer Count">
+            <option value="10">10 miles</option>
+            <option value="25">25 miles</option>
+            <option value="50">50 miles</option>
+            <option value="100">100 miles</option>
+            <option value="250">250 miles</option>
+            <option value="100000">Unlimited</option>
+          </select>
           <input type="text" name="date" id="search-times_date" class="required datepicker" placeholder="Date" />
           <input type="text" name="time" id="search-times_time" class="required timepicker" placeholder="Time" />
           <select name="golfer-count" id="search-times_golfer-count" class="required" placeholder="Golfer Count">
@@ -196,6 +208,16 @@
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
         <div id="tee_holder">
+        </div>
+      </div>
+      <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
+    </div>
+
+    <div data-role="page" id="page_book">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="book_holder">
+          <h1>Tee Time Details</h1>
         </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
@@ -263,11 +285,13 @@
       <div class="result_time_openings">
         <% _.each(tee_time.get("selected"), function(slot) { %>
           <% slots[slot.id] = slot %>
-          <a href="#page_tee" class="tee_link" id="tee_link_<%- slot.id %>_<%- slot.course_id %>">
+          <a href="#page_tee" class="tee_link" id="tee_link_<%- slot.id %>_<%- slot.course_id %>_<%- slot.tee_time %>">
             <center>
-              <%- slot.tee_time.substring(11,16) %>
+              <% hours   = slot.tee_time.substring(11,16).split(":")[0] %>
+              <% minutes = slot.tee_time.substring(11,16).split(":")[1] %>
+              <% if (hours > 12) { %><%- hours-12 %><% } else { %><%- hours %><% } %>:<%- minutes %><% if (hours > 11) { %>pm<% } else { %>am<% } %>
               <br />
-              <%- slot.rate %>
+              $<%- slot.rate %>0
             </center>
           </a>
         <% }); %>
@@ -334,9 +358,6 @@
 </script>
 
 <script type="text/template" id="tee-times_template">
-  <div class="ui-bar ui-bar-b gp_header">
-    Upcoming Golf
-  </div>
   <% if (tee_times.length > 0) { %>
     <% tee_times.each(function(tee_time) { %>
       <br />

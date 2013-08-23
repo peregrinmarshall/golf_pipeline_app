@@ -1,10 +1,12 @@
+var remote_url = "http://www.golfpipelinedemo.com";
+//var remote_url = "http://localhost:3000";
+
+var do_validate = true;
+var token       = false;
+var map         = false;
+
 document.addEventListener("deviceready", onDeviceReady, false);
-
-window.localStorage.setItem("remote_url", "http://www.golfpipelinedemo.com");
-//window.localStorage.setItem("remote_url", "http://localhost:3000");
-
-var token = false;
-var map   = false;
+window.localStorage.setItem("remote_url", remote_url);
 
 function onDeviceReady()
 {
@@ -29,8 +31,11 @@ function onDeviceReady()
 
   $(document).on("click", ".tee_link", function()
   {
-    tt_id = $(this).attr("id").split("_")[2];
-    c_id = $(this).attr("id").split("_")[3];
+    tt_id       = $(this).attr("id").split("_")[2];
+    c_id        = $(this).attr("id").split("_")[3];
+    time_string = $(this).attr("id").split("_")[4];
+    window.localStorage.setItem("book_time", time_string);
+    window.localStorage.setItem("book_id", tt_id);
     r = connect("/courses/" + c_id + ".json", "get", data, true);
     course = new Course(r);
     new TimeView({ el: $("#tee_holder"), course: course });
@@ -65,12 +70,12 @@ function searchTimes()
     "golfer_count": $("#search-times_golfer-count").val()
     //"location":     "80211",
     //"distance":     "1234",
-    //"date":         "22 August, 2013",
+    //"date":         "24 August, 2013",
     //"time":         "2:00 PM",
     //"golfer_count": "4"
   }};
 
-  if (!$("#search-times_form").valid())
+  if (!$("#search-times_form").valid() && do_validate)
     return false;
 
   url = "/search_tee_times/results.json";
@@ -78,6 +83,7 @@ function searchTimes()
   if (apiResponse)
   {
     timeResults = new TimeResults(apiResponse);
+    console.log(timeResults);
     new TimeResultsView({ el: $("#results_times"), time_results: timeResults });
     $.mobile.changePage($('#page_result-times'));
   }
@@ -94,16 +100,16 @@ function bookTime()
       "first_name"     : $("#payment_first-name").val(),
       "last_name"      : $("#payment_last-name").val(),
       "email"          : $("#payment_email").val(),
-      "phone_number"   : $("#payment_phone").val(),
-      "cc_number"      : $("#payment_number").val(),
-      "cc_exp_month"   : $("#payment_month").val(),
-      "cc_exp_year"    : $("#payment_year").val(),
+      "phone_number"   : "123-456-7890",//$("#payment_phone").val(),
+      "cc_number"      : "4111111111111111",//$("#payment_number").val(),
+      "cc_exp_month"   : "06",//$("#payment_month").val(),
+      "cc_exp_year"    : "2017",//$("#payment_year").val(),
       "user_id"        : currentUser.get("id"),
       "booking"        : "1",
       "golfer_count"   : "4",
-      "tee_time"       : "2013-08-13 14:49:00 UTC",
+      "tee_time"       : window.localStorage.getItem("book_time"),
       "play_course_id" : slots[tt_id].play_course_id,
-      "save_address"   : 0,
+      "save_address"   : "0",
       "line_1"         : "123 Main Street",
       "city"           : "Anytown",
       "state"          : "CO",
@@ -111,7 +117,7 @@ function bookTime()
     }
   };
 
-  url = "/search_tee_times/results.json";
+  url = "/search_tee_times/" + window.localStorage.getItem("book_id") + ".json";
   apiResponse = connect(url, "put", data, true);
   if (apiResponse)
   {
@@ -121,10 +127,13 @@ function bookTime()
       $("#page_search-times .errors").html("Sorry, that tee time no longer exists.").show();
     }
     else
-      alert("Success!");
+    {
+      $("#page_upcoming_golf .alerts").html("Your time has been booked.").show();
+      tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
+      new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
+      $.mobile.changePage($('#page_upcoming_golf'));
+    }
   }
-  else
-    alert("There was an error."); 
 }
 
 function searchCourses()
@@ -157,7 +166,7 @@ function login()
     //password: "acgaff"
   }};
 
-  if (!$("#login_form").valid())
+  if (!$("#login_form").valid() && do_validate)
     return false;
 
   url = "/users/sign_in.json"

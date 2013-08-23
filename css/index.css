@@ -288,6 +288,12 @@ body
   padding: 10px;
 }
 
+.alerts
+{
+  color: green;
+  padding: 10px;
+}
+
 .hidden
 {
   display: none;
