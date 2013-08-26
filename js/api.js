@@ -10,6 +10,7 @@ function connect(url, type, data, sendToken)
   }
   else
     data = JSON.stringify(data);
+
   var api = $.ajax(
   {
     url: window.localStorage.getItem("remote_url") + url,
@@ -31,7 +32,8 @@ function connect(url, type, data, sendToken)
     }
   }).fail( function(c) {
     if (c.status != "401")
-      alert(c.status + ": There was an error connecting to the API.");
+      alert("There was an error connecting to the API.  Please try again.");
   });
+
   return response;
 }
