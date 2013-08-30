@@ -123,14 +123,15 @@ h1 {
 
 .blue_box
 {
-  width: 48%;
+  width: 47%;
   float: left;
   font-size: 12px;
+  height: 43vw;
 }
 
 .blue_box.with_margin
 {
-  margin-left: 2% !important;
+  margin-left: 3vw !important;
 }
 
 .logo
@@ -181,7 +182,7 @@ h1 {
   margin-left: auto;
   margin-right: auto;
   position: relative;
-  top: 4px;
+  top: 6px;
 }
 
 input
@@ -251,7 +252,7 @@ body
 
 #page_home .blue_box img
 {
-  width: 48%;
+  width: 24vw;
 }
 
 .upcoming_golf_block
