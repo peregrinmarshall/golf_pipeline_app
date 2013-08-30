@@ -78,8 +78,6 @@ function searchTimes()
   if (!$("#search-times_form").valid() && do_validate)
     return false;
 
-  $("#loading").show();
-
   url = "/search_tee_times/results.json";
   apiResponse = connect(url, "get", data, true);
   if (apiResponse)
@@ -91,7 +89,6 @@ function searchTimes()
   }
   else
     alert("There was an error.");
-  $("#loading").hide();
 }
 
 function bookTime()

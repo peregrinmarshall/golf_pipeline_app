@@ -1,5 +1,6 @@
 function connect(url, type, data, sendToken)
 {
+  $("#loading").show();
   var response = false;
   if (window.localStorage.getItem("token") && typeof data !== "undefined" && sendToken)
     data["auth_token"] = window.localStorage.getItem("token");
@@ -26,11 +27,13 @@ function connect(url, type, data, sendToken)
     dataType: "json",
     success: function(feedback)
     {
+      $("#loading").hide();
       response = feedback;
       if (typeof feedback == "undefined")
         response = true;
     }
   }).fail( function(c) {
+    $("#loading").hide();
     if (c.status != "401")
       alert("There was an error connecting to the API.  Please try again.");
   });
