@@ -19,28 +19,25 @@ $(document).ready( function()
   {
     $.mobile.changePage($("#page_home"), {transition: "slide", reverse: false}, true, true);
   });
-
-  $(document).on("pagebeforehide", function(e)
-  {
-    target = e.currentTarget.URL.split("_")[1];
-
-    if (target == "profile")
-      offset = "25%"
-    else if (target == "search-times")
-      offset = "-75%"
-    else if (target == "upcoming-golf")
-      offset = "-125%"
-    else
-      offset = "-75%";
-
-    //$(".slider_bg").css("left", offset + "%");
-    $(".slider_bg").animate(
-    {
-      left: offset
-    }, 500);
-    $(".slider_bg").css("top", "10px");
-    alert("TBD");
-    //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
-  });
-
 });
+
+$(document).on("pagebeforehide", function(e)
+{
+  target = e.currentTarget.URL.split("_")[1];
+
+  if (target == "profile")
+    offset = "25%"
+  else if (target == "search-times")
+    offset = "-75%"
+  else if (target == "upcoming-golf")
+    offset = "-125%"
+  else
+    offset = "-25%";
+
+  $(".slider_bg").animate(
+  {
+    left: offset
+  }, 500);
+    setTimeout(google.maps.event.trigger(map, 'resize'), 150);
+});
+
