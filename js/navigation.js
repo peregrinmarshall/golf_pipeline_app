@@ -31,13 +31,14 @@ $(document).ready( function()
     else if (target == "upcoming-golf")
       offset = "-125%"
     else
-      offset = "-25%";
+      offset = "-75%";
 
     //$(".slider_bg").css("left", offset + "%");
     $(".slider_bg").animate(
     {
       left: offset
     }, 500);
+    $(".slider_bg").css("top", "10px");
     alert("TBD");
     //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
