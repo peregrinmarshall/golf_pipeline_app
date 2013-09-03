@@ -23,7 +23,7 @@ $(document).ready( function()
 
 $(document).on("pagechange", function(e)
 {
-  target = e.currentTarget.URL.split("_")[1];
+  target = e.currentTarget.URL.split("page_")[1];
 
   alert(target);
 
