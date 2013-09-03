@@ -21,9 +21,11 @@ $(document).ready( function()
   });
 });
 
-$(document).on("pagebeforehide", function(e)
+$(document).on("pagechange", function(e)
 {
   target = e.currentTarget.URL.split("_")[1];
+
+  alert(target);
 
   if (target == "profile")
     offset = "25%"
@@ -38,6 +40,7 @@ $(document).on("pagebeforehide", function(e)
   {
     left: offset
   }, 500);
-    setTimeout(google.maps.event.trigger(map, 'resize'), 150);
+  
+  //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
 });
 
