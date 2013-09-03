@@ -38,7 +38,7 @@ $(document).ready( function()
     {
       left: offset
     }, 500);
-    setTimeout(google.maps.event.trigger(map, 'resize'), 150);
+    //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 
 });
