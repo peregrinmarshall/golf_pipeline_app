@@ -11,12 +11,11 @@ $(document).ready( function()
       '</a>'+
     '</center>'+
     '<div class="nav_strip">'+
-      '<ul>'+
-        '<li>Profile</li>'+
-        '<li>Home</li>'+
-        '<li>Search Tee Times</li>'+
-      '</ul>'+
-      '<br class="clear" />'+
+      '<div>'+
+        '<a>Profile</a>'+
+        '<a>Home</a>'+
+        '<a>Search Tee Times</a>'+
+      '</div>'+
       '<div id="white_arrow">'+
         '<center>&#9650;</center>'+
       '</div>'+

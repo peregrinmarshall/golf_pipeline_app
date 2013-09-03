@@ -18,6 +18,7 @@ function connect(url, type, data, sendToken)
     type: type,
     traditional: true,
     async: false,
+    timeout: 10000,
     data: data,
     headers:
     {

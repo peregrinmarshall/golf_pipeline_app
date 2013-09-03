@@ -153,26 +153,27 @@ h1 {
 .nav_strip
 {
   background-color: #353535;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 20px;
   position: relative;
 }
 
-.nav_strip ul
+.nav_strip div
 {
+
+  height: 20px;
+  width: 1000px;
   position: relative;
-  list-style: none;
-  height: 17px;
-  line-height: 20px;
-  overflow: hidden;
-  width: 1000%;
-  left: 155px;
-  margin: 0px;
+  left: 20px;
 }
 
-.nav_strip ul li
+.nav_strip div a
 {
+  width: 200px;
+  display: block;
   float: left;
-  text-align: center;
-  width: 5%;
 }
 
 #white_arrow

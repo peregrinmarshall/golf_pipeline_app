@@ -31,7 +31,7 @@ $(document).ready( function()
     else
       offset = "-35";
 
-    $(".nav_strip ul").css("left", offset + "%");
+    $(".nav_strip div").css("left", offset + "%");
     setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 
