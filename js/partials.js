@@ -10,15 +10,13 @@ $(document).ready( function()
         '<img src="./img/logo.png" class="mini_logo" />'+
       '</a>'+
     '</center>'+
-    '<div class="nav_strip">'+
-      '<div>'+
+    '<div class="slider_box">'+
+      '<div class="slider_bg">'+
         '<a>Profile</a>'+
         '<a>Home</a>'+
         '<a>Search Tee Times</a>'+
       '</div>'+
-      '<div id="white_arrow">'+
-        '<center>&#9650;</center>'+
-      '</div>'+
+      '<div id="white_arrow">&#9650;</div>'+
     '</div>'+
   '');
 

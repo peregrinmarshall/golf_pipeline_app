@@ -150,7 +150,7 @@ h1 {
   clear: both;
 }
 
-.nav_strip
+.slider_box
 {
   background-color: #353535;
   width: 100%;
@@ -160,7 +160,7 @@ h1 {
   position: relative;
 }
 
-.nav_strip div
+.slider_box .slider_bg
 {
 
   height: 20px;
@@ -169,19 +169,19 @@ h1 {
   left: 20px;
 }
 
-.nav_strip div a
+.slider_box .slider_bg a
 {
   width: 200px;
   display: block;
   float: left;
+  text-align: center;
 }
 
 #white_arrow
 {
-  margin-left: auto;
-  margin-right: auto;
   position: relative;
   top: 7px;
+  left: 48vw;
 }
 
 input

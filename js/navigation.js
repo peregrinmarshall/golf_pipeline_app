@@ -25,13 +25,17 @@ $(document).ready( function()
     target = e.currentTarget.URL.split("_")[1];
 
     if (target == "profile")
-      offset = "12"
+      offset = "58"
     else if (target == "search-times")
-      offset = "-79"
+      offset = "-339"
     else
-      offset = "-35";
+      offset = "-140";
 
-    $(".nav_strip div").css("left", offset + "%");
+    //$(".slider_bg").css("left", offset + "%");
+    $(".slider_bg").animate(
+    {
+      left: offset + "px"
+    }, 250);
     setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 
