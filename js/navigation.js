@@ -26,13 +26,13 @@ $(document).on("pagebeforehide", function(e)
   target = e.currentTarget.URL.split("page_")[1];
 
   if (target == "profile")
-    offset = "25%"
+    offset = "35%"
   else if (target == "search-times")
-    offset = "-75%"
+    offset = "-25%"
   else if (target == "upcoming-golf")
-    offset = "-125%"
+    offset = "-55%"
   else
-    offset = "-25%";
+    offset = "5%";
 
   if (typeof target != "undefined")
   {

@@ -113,6 +113,9 @@ h1 {
 {
   background-color: white;
   background-image: none;
+  border-width: 1px 1px 0px 1px;
+  border-color: white;
+  border-style: solid;
 }
 
 .header img.mini_logo
@@ -156,14 +159,14 @@ h1 {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  height: 20px;
+  height: 22px;
   position: relative;
 }
 
 .slider_box .slider_bg
 {
 
-  height: 20px;
+  height: 22px;
   width: 1000%;
   position: absolute;
   left: 20px;
@@ -171,16 +174,25 @@ h1 {
 
 .slider_box .slider_bg a
 {
-  width: 5%;
+  width: 3%;
   display: block;
   float: left;
   text-align: center;
+  line-height: 21px;
+  font-size: 9px;
+  font-weight: 400;
+  color: white;
+}
+
+.slider_box .slider_bg a:hover
+{
+  color: white;
 }
 
 #white_arrow
 {
   position: relative;
-  top: 11px;
+  top: 15px;
   text-align: center;
 }
 
