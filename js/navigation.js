@@ -21,11 +21,9 @@ $(document).ready( function()
   });
 });
 
-$(document).on("pagechange", function(e)
+$(document).on("pagebeforehide", function(e)
 {
   target = e.currentTarget.URL.split("page_")[1];
-
-  alert(target);
 
   if (target == "profile")
     offset = "25%"
@@ -36,11 +34,14 @@ $(document).on("pagechange", function(e)
   else
     offset = "-25%";
 
-  $(".slider_bg").animate(
+  if (typeof target != "undefined")
   {
-    left: offset
-  }, 500);
-  
-  //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
+    $(".slider_bg").animate(
+    {
+      left: offset
+    }, 500);
+  }
+
+  setTimeout(google.maps.event.trigger(map, 'resize'), 150);
 });
 
