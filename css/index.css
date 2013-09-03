@@ -165,7 +165,7 @@ h1 {
 
   height: 20px;
   width: 1000px;
-  position: relative;
+  position: absolute;
   left: 20px;
 }
 
