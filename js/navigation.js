@@ -25,13 +25,13 @@ $(document).ready( function()
     target = e.currentTarget.URL.split("_")[1];
 
     if (target == "profile")
-      offset = "25vw"
+      offset = "25%"
     else if (target == "search-times")
-      offset = "-75vw"
+      offset = "-75%"
     else if (target == "upcoming-golf")
-      offset = "-125vw"
+      offset = "-125%"
     else
-      offset = "-25vw";
+      offset = "-25%";
 
     //$(".slider_bg").css("left", offset + "%");
     $(".slider_bg").animate(
