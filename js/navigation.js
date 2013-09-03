@@ -20,22 +20,24 @@ $(document).ready( function()
     $.mobile.changePage($("#page_home"), {transition: "slide", reverse: false}, true, true);
   });
 
-  $(document).on("pagechange", function(e)
+  $(document).on("pagebeforehide", function(e)
   {
     target = e.currentTarget.URL.split("_")[1];
 
     if (target == "profile")
-      offset = "58"
+      offset = "25vw"
     else if (target == "search-times")
-      offset = "-339"
+      offset = "-75vw"
+    else if (target == "upcoming-golf")
+      offset = "-125vw"
     else
-      offset = "-140";
+      offset = "-25vw";
 
     //$(".slider_bg").css("left", offset + "%");
     $(".slider_bg").animate(
     {
-      left: offset + "px"
-    }, 250);
+      left: offset
+    }, 500);
     setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 

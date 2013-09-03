@@ -15,6 +15,7 @@ $(document).ready( function()
         '<a>Profile</a>'+
         '<a>Home</a>'+
         '<a>Search Tee Times</a>'+
+        '<a>Upcoming Golf</a>'+
       '</div>'+
       '<div id="white_arrow">&#9650;</div>'+
     '</div>'+
