@@ -38,6 +38,7 @@ $(document).ready( function()
     {
       left: offset
     }, 500);
+    alert("TBD");
     //setTimeout(google.maps.event.trigger(map, 'resize'), 150);
   });
 
