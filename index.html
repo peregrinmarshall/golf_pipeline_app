@@ -43,11 +43,11 @@
       <div data-role="content">
         <a href="#page_search-times" data-role="button" data-theme="b" data-corners="false" class="blue_box" style=""><img src="./img/icon_clock.png" /><br />Organize a<br />Tee Time</a>
         <!--
-        <a href="#page_search-courses" data-role="button" data-theme="b" class="blue_box with_margin">Course Lookup</a>
           <a href="#page_upcoming" data-role="button" data-theme="b" class="blue_box with_margin">Upcoming Golf</a>
-          <a href="#page_activity" data-role="button" data-theme="b" class="blue_box">View Activity</a>
         -->
         <a href="#page_upcoming-golf" data-role="button" data-theme="b" data-corners="false" class="blue_box with_margin"><img src="./img/icon_calendar.png" /><br />Upcoming<br />Golf</a>
+        <a href="#page_activities" data-role="button" data-theme="b" data-corners="false" class="blue_box"><img src="./img/icon_bubbles.png" /><br />View<br />Activity</a>
+        <a href="#page_search-courses" data-role="button" data-theme="b" data-corners="false" class="blue_box with_margin"><img src="./img/icon_glass.png" /><br />Course<br />Lookup</a>
         <div class="clear"></div>
         <a href="#page_profile" data-role="button" data-theme="b" data-corners="false" id="profile_button">View/Edit Profile</a>
         <a href="http://www.golfpipeline.com" data-role="button" data-theme="b" data-corners="false">Visit mobile site<br />to post recent scores</a>
@@ -62,15 +62,8 @@
         <div class="ui-bar ui-bar-b gp_header">
           Details
         </div>
-        <table>
-          <tr>
-            <td>First Name</td><td><span class="h_first_name"></span></td>
-          </tr>
-          <tr>
-            <td>Last Name</td><td><span class="h_last_name"></span></td>
-          </tr>
-        </table>
-        <a href="#page_edit-profile" data-role="button" data-theme="b" data-corners="false">Edit Profile</a>
+        <div id="profile_holder">
+        </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -79,11 +72,17 @@
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
         <form action="" id="update-profile_form" method="get">
-          <input type="text" name="first_name" id="profile_first_name" class="required v_first_name" placeholder="First Name" />
-          <input type="text" name="last_name" id="profile_last_name" class="required v_last_name" placeholder="Last Name" />
-          <input type="submit" value="Update Profile" id="update-profile_submit" data-theme="b" />
+          <div id="profile-editor_holder">
+          </div>
         </form>
-        <div id="edit-profile_errors"></div>
+      </div>
+    </div>
+
+    <div data-role="page" id="page_activities">
+      <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
+      <div data-role="content">
+        <div id="activities_holder">
+        </div>
       </div>
     </div>
 
@@ -285,7 +284,19 @@
   <% slots = new Array(); %>
   <% time_results.each(function(tee_time) { %>
     <div class="result_time_course">
-      <h3><%- tee_time.get("name") %></h3>
+      <h3><%- tee_time.get("course_name") %></h3>
+      <h4><%- tee_time.get("name") %></h4>
+      <div id="ratings">
+        User Rating:
+        <% for (var i=0;i<tee_time.get("course_user_rating");i++) { %>
+          <img src="./img/star.png" />
+        <% } %>
+        <br />
+        Critic Rating:
+        <% for (var i=0;i<tee_time.get("course_critic_rating");i++) { %>
+          <img src="./img/diamond.png" />
+        <% } %>
+      </div>
       <div class="result_time_openings">
         <% _.each(tee_time.get("selected"), function(slot) { %>
           <% slots[slot.id] = slot %>
@@ -361,6 +372,24 @@
   <% } %>
 </script>
 
+<script type="text/template" id="activities_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Activities
+  </div>
+  <% if (activities.length > 0) { %>
+    <% activities.each(function(activity) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header">
+        <%- activity.get("user")["first_name"] %>
+        <%- activity.get("user")["last_name"] %>...
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no activities.</i>
+  <% } %>
+</script>
+
 <script type="text/template" id="tee-times_template">
   <% if (tee_times.length > 0) { %>
     <% tee_times.each(function(tee_time) { %>
@@ -376,3 +405,46 @@
     <i>You have no upcoming golf.</i>
   <% } %>
 </script>
+
+<script type="text/template" id="profile_template">
+  <table>
+    <tr>
+      <td>
+        First Name
+      </td>
+      <td>
+        <span>
+          <%- user.get("first_name") %>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Last Name
+      </td>
+      <td>
+        <span>
+          <%- user.get("last_name") %>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Favorite Golfer
+      </td>
+      <td>
+        <span>
+          <%- user.get("favorite_golfer") %>
+        </span>
+      </td>
+    </tr>
+  </table>
+  <a href="#page_edit-profile" data-role="button" data-theme="b" data-corners="false">Edit Profile</a>
+</script>
+
+<script type="text/template" id="profile-editor_template">
+    <input type="text" name="first_name" id="profile_first_name" class="required" placeholder="First Name" value="<%- user.get("first_name") %>" />
+    <input type="text" name="last_name" id="profile_last_name" class="required" placeholder="Last Name" value="<%- user.get("last_name") %>" />
+    <input type="text" name="favorite-golfer" id="profile_favorite-golfer" class="required" placeholder="Favorite Golfer" value="<%- user.get("favorite_golfer") %>" />
+    <input type="submit" value="Update Profile" id="update-profile_submit" data-theme="b" />
+<script>

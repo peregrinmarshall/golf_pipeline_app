@@ -33,6 +33,14 @@ $(document).ready( function()
     }
   });
 
+  Activity = Backbone.Model.extend(
+  {
+    initialize: function()
+    {
+      console.log("Activity is created.");
+    }
+  });
+
   User = Backbone.Model.extend(
   {
     initialize: function()
@@ -75,6 +83,11 @@ $(document).ready( function()
     model: Notification
   });
 
+  Activities = Backbone.Collection.extend(
+  {
+    model: Activity
+  });
+
   // Views
   TimeResultsView = Backbone.View.extend(
   {
@@ -98,6 +111,19 @@ $(document).ready( function()
     render: function()
     {
       var template = _.template( $("#notifications_template").html(), { notifications: this.options.notifications } );
+      this.$el.html( template );
+    }
+  });
+
+  ActivitiesView = Backbone.View.extend(
+  {
+    initialize: function(options)
+    {
+      this.render();
+    },
+    render: function()
+    {
+      var template = _.template( $("#activities_template").html(), { activities: this.options.activities } );
       this.$el.html( template );
     }
   });
@@ -138,6 +164,32 @@ $(document).ready( function()
     {
       var template = _.template( $("#payment_template").html(), { user: this.options.user, slot: this.options.slot } );
       this.$el.html( template );
+    }
+  });
+
+  ProfileView = Backbone.View.extend(
+  {
+    initialize: function(options)
+    {
+      this.render();
+    },
+    render: function()
+    {
+      var template = _.template( $("#profile_template").html(), { user: this.options.user } );
+      this.$el.html( template ).trigger('create');
+    }
+  });
+
+  ProfileEditorView = Backbone.View.extend(
+  {
+    initialize: function(options)
+    {
+      this.render();
+    },
+    render: function()
+    {
+      var template = _.template( $("#profile-editor_template").html(), { user: this.options.user } );
+      this.$el.html( template ).trigger('create');
     }
   });
 });

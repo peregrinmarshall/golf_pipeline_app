@@ -175,6 +175,9 @@ function login()
   if (apiResponse)
   {
     currentUser = new User(apiResponse);
+    window.localStorage.setItem("token", currentUser.attributes.authentication_token);
+    new ProfileView({ el: $("#profile_holder"), user: currentUser });
+    new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
     $.mobile.changePage($('#page_home'));
     thumbURL = window.localStorage.getItem("remote_url") + currentUser.get("image_thumb");
     imageURL = window.localStorage.getItem("remote_url") + currentUser.get("image_url");
@@ -188,6 +191,10 @@ function login()
       $(".notification_plural").hide();
     new NotificationsView({ el: $("#notifications_holder"), notifications: notifications });
 
+    activities = new Activities(connect("/profile/friend_activity.json", "get", data, true));
+    $(".activity_count").html(activities.length);
+    new ActivitiesView({ el: $("#activities_holder"), activities: activities });
+
     tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
     new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
   }
@@ -197,17 +204,26 @@ function login()
 
 function updateProfile()
 {
-  firstName = $("#profile_first_name").val();
-  lastName = $("#profile_last_name").val();
-  data = { user: {
-    first_name: firstName,
-    last_name: lastName
-  } };
+  data = {
+    user: {
+      first_name:      $("#profile_first_name").val(),
+      last_name:       $("#profile_last_name").val(),
+      profile_attributes: {
+        favorite_golfer: $("#profile_favorite-golfer").val()
+      }
+    }
+  };
   apiResponse = connect("/users.json", "put", data, true);
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
-    currentUser.set({ first_name: firstName });
+    currentUser.set({
+      first_name:      $("#profile_first_name").val(),
+      last_name:       $("#profile_last_name").val(),
+      favorite_golfer: $("#profile_favorite-golfer").val()
+    });
+    new ProfileView({ el: $("#profile_holder"), user: currentUser });
+    new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
   }
   else
     $("#edit-profile_errors").html("The requested change could not be made.");

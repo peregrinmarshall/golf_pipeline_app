@@ -1,24 +1,31 @@
+var pageArray = new Array(
+  "profile",
+  "home",
+  "search-times",
+  "upcoming-golf",
+  "activities");
+
 $(document).ready( function()
 {
-  $("#page_home").on('swipeleft', function(event)
+
+  $("div[data-role=page]").on('swipeleft', function(event)
   {
-    $.mobile.changePage($("#page_search-times"), {transition: "slide", reverse: false}, true, true);
+    startingPageName = $(this).attr("id").split("_")[1];
+    key = pageArray.indexOf(startingPageName);
+    targetPageName = pageArray[key+1];
+    if ($("#page_" + targetPageName).length > 0)
+      $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: false}, true, true);
   });
 
-  $("#page_home").on('swiperight', function(event)
+  $("div[data-role=page]").on('swiperight', function(event)
   {
-    $.mobile.changePage($("#page_profile"), {transition: "slide", reverse: true}, true, true);
+    startingPageName = $(this).attr("id").split("_")[1];
+    key = pageArray.indexOf(startingPageName);
+    targetPageName = pageArray[key-1];
+    if ($("#page_" + targetPageName).length > 0)
+      $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: true}, true, true);
   });
 
-  $("#page_search-times").on('swiperight', function(event)
-  {
-    $.mobile.changePage($("#page_home"), {transition: "slide", reverse: true}, true, true);
-  });
-
-  $("#page_profile").on('swipeleft', function(event)
-  {
-    $.mobile.changePage($("#page_home"), {transition: "slide", reverse: false}, true, true);
-  });
 });
 
 $(document).on("pagebeforehide", function(e)
@@ -31,6 +38,8 @@ $(document).on("pagebeforehide", function(e)
     offset = "-25%"
   else if (target == "upcoming-golf")
     offset = "-55%"
+  else if (target == "activities")
+    offset = "-85%"
   else
     offset = "5%";
 
