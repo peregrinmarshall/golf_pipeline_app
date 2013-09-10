@@ -17,6 +17,7 @@ $(document).ready( function()
         '<a>Search Tee Times</a>'+
         '<a>Upcoming Golf</a>'+
         '<a>Friend Activity</a>'+
+        '<a>Courses</a>'+
       '</div>'+
       '<div id="white_arrow">&#9650;</div>'+
     '</div>'+

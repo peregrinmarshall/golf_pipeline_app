@@ -217,11 +217,16 @@ function updateProfile()
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
+    console.log("1");
+    console.log(currentUser);
     currentUser.set({
       first_name:      $("#profile_first_name").val(),
       last_name:       $("#profile_last_name").val(),
       favorite_golfer: $("#profile_favorite-golfer").val()
     });
+    console.log("2");
+    console.log(currentUser);
+    console.log("3");
     new ProfileView({ el: $("#profile_holder"), user: currentUser });
     new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
   }

@@ -134,9 +134,19 @@
     <div data-role="page" id="page_search-courses">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
+        <div class="ui-bar ui-bar-b gp_header">
+          Course Lookup
+        </div>
         <form action="#page_result-courses" id="search-courses_form" method="get">
           <input type="text" name="center" id="search-courses_location" class="required" minlength="3" placeholder="Location" />
-          <input type="text" name="distance" id="search-courses_distance" class="required" placeholder="Distance" />
+          <select name="distance" id="search-courses_distance" class="required" placeholder="Distance">
+            <option value="10">10 miles</option>
+            <option value="25">25 miles</option>
+            <option value="50">50 miles</option>
+            <option value="100">100 miles</option>
+            <option value="250">250 miles</option>
+            <option value="100000">Unlimited</option>
+          </select>
           <input type="submit" value="Search" id="search-courses_submit" data-theme="b" />
         </form>
         <div id="search-courses_errors"></div>
@@ -285,17 +295,25 @@
   <% time_results.each(function(tee_time) { %>
     <div class="result_time_course">
       <h3><%- tee_time.get("course_name") %></h3>
-      <h4><%- tee_time.get("name") %></h4>
-      <div id="ratings">
-        User Rating:
-        <% for (var i=0;i<tee_time.get("course_user_rating");i++) { %>
-          <img src="./img/star.png" />
-        <% } %>
-        <br />
-        Critic Rating:
-        <% for (var i=0;i<tee_time.get("course_critic_rating");i++) { %>
-          <img src="./img/diamond.png" />
-        <% } %>
+      <div class="ratings">
+        <div class="user_ratings">
+          User Rating:
+          <% if (!tee_time.get("course_user_rating")) { %>
+            <i>not available</i>
+          <% } %>
+          <% for (var i=0;i<tee_time.get("course_user_rating");i++) { %>
+            <img src="./img/star.png" />
+          <% } %>
+        </div>
+        <div class="critic_ratings">
+          Critic Rating:
+          <% if (!tee_time.get("course_critic_rating")) { %>
+            <i>not available</i>
+          <% } %>
+          <% for (var i=0;i<tee_time.get("course_critic_rating");i++) { %>
+            <img src="./img/diamond.png" />
+          <% } %>
+        </div>
       </div>
       <div class="result_time_openings">
         <% _.each(tee_time.get("selected"), function(slot) { %>
@@ -322,16 +340,25 @@
     Tee Time Details
   </div>
   <h3><%- course.get("label") %></h3>
-  <div id="ratings">
-    User Rating:
-    <% for (var i=0;i<course.get("user_rating");i++) { %>
-      <img src="./img/star.png" />
-    <% } %>
-    <br />
-    Critic Rating:
-    <% for (var i=0;i<course.get("critic_rating");i++) { %>
-      <img src="./img/diamond.png" />
-    <% } %>
+  <div class="ratings">
+    <div class="user_ratings">
+      User Rating:
+      <% if (!course.get("user_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("user_rating");i++) { %>
+        <img src="./img/star.png" />
+      <% } %>
+    </div>
+    <div class="critic_ratings">
+      Critic Rating:
+      <% if (!course.get("critic_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("critic_rating");i++) { %>
+        <img src="./img/diamond.png" />
+      <% } %>
+    </div>
   </div>
   <br /><br />
   <%- course.get("address") %>
@@ -380,8 +407,7 @@
     <% activities.each(function(activity) { %>
       <br />
       <div class="ui-bar ui-bar-a gp_header">
-        <%- activity.get("user")["first_name"] %>
-        <%- activity.get("user")["last_name"] %>...
+        <%- activity.get("text") %>
       </div>
     <% }); %>
   <% } else { %>
@@ -434,7 +460,9 @@
       </td>
       <td>
         <span>
-          <%- user.get("favorite_golfer") %>
+          <% console.log("5") %>
+          <% console.log(user) %>
+          <%- user.attributes.favorite_golfer ? user.attributes.favorite_golfer : user.get("profile")["favorite_golfer"] %>
         </span>
       </td>
     </tr>
@@ -445,6 +473,6 @@
 <script type="text/template" id="profile-editor_template">
     <input type="text" name="first_name" id="profile_first_name" class="required" placeholder="First Name" value="<%- user.get("first_name") %>" />
     <input type="text" name="last_name" id="profile_last_name" class="required" placeholder="Last Name" value="<%- user.get("last_name") %>" />
-    <input type="text" name="favorite-golfer" id="profile_favorite-golfer" class="required" placeholder="Favorite Golfer" value="<%- user.get("favorite_golfer") %>" />
+    <input type="text" name="favorite-golfer" id="profile_favorite-golfer" class="required" placeholder="Favorite Golfer" value="<%- user.attributes.favorite_golfer ? user.attributes.favorite_golfer : user.get("profile")["favorite_golfer"] %>" />
     <input type="submit" value="Update Profile" id="update-profile_submit" data-theme="b" />
 <script>

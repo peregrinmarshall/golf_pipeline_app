@@ -3,7 +3,8 @@ var pageArray = new Array(
   "home",
   "search-times",
   "upcoming-golf",
-  "activities");
+  "activities",
+  "search-courses");
 
 $(document).ready( function()
 {
@@ -40,6 +41,8 @@ $(document).on("pagebeforehide", function(e)
     offset = "-55%"
   else if (target == "activities")
     offset = "-85%"
+  else if (target == "search-courses")
+    offset = "-115%"
   else
     offset = "5%";
 
