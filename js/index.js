@@ -1,9 +1,24 @@
 var remote_url = "http://www.golfpipelinedemo.com";
-//var remote_url = "http://localhost:3000";
+var remote_url = "http://localhost:3000";
 
 var do_validate = true;
 var token       = false;
 var map         = false;
+var selections  = [
+  "skill_level",
+  "gender",
+  "martial_status",
+  "year_started",
+  "gamble",
+  "driver_model",
+  "fairway_woods_model",
+  "hybrids_model",
+  "irons_model",
+  "wedges_model",
+  "putter_model",
+  "golf_ball_model",
+  "shoe_brand"
+  ];
 
 document.addEventListener("deviceready", onDeviceReady, false);
 window.localStorage.setItem("remote_url", remote_url);
@@ -162,8 +177,6 @@ function login()
   data = { user: {
     login: $("#login_username").val(),
     password: $("#login_password").val()
-    //login: "perejunk@yahoo.com",
-    //password: "acgaff"
   }};
 
   if (!$("#login_form").valid() && do_validate)
@@ -209,7 +222,22 @@ function updateProfile()
       first_name:      $("#profile_first_name").val(),
       last_name:       $("#profile_last_name").val(),
       profile_attributes: {
-        favorite_golfer: $("#profile_favorite-golfer").val()
+        favorite_golfer:     $("#profile_favorite-golfer").val(),
+        favorite_event:      $("#profile_favorite-event").val(),
+        tournaments_a_year:  $("#profile_tournaments-a-year").val(),
+        skill_level:         $("#profile_skill-level").val(),
+        gender:              $("#profile_gender").val(),
+        marital_status:      $("#profile_marital-status").val(),
+        year_started:        $("#profile_year-started").val(),
+        gamble:              $("#profile_gamble").val(),
+        driver_model:        $("#profile_driver-model").val(),
+        fairway_woods_model: $("#profile_fairway-woods-model").val(),
+        hybrids_model:       $("#profile_hybrids-model").val(),
+        irons_model:         $("#profile_irons-model").val(),
+        wedges_model:        $("#profile_wedges-model").val(),
+        putter_model:        $("#profile_putter-model").val(),
+        golf_ball_model:     $("#profile_golf-ball-model").val(),
+        shoe_brand:          $("#profile_shoe-brand").val()
       }
     }
   };
@@ -220,13 +248,25 @@ function updateProfile()
     console.log("1");
     console.log(currentUser);
     currentUser.set({
-      first_name:      $("#profile_first_name").val(),
-      last_name:       $("#profile_last_name").val(),
-      favorite_golfer: $("#profile_favorite-golfer").val()
+      first_name:          $("#profile_first_name").val(),
+      last_name:           $("#profile_last_name").val(),
+      favorite_golfer:     $("#profile_favorite-golfer").val(),
+      favorite_event:      $("#profile_favorite-event").val(),
+      tournaments_a_year:  $("#profile_tournaments-a-year").val(),
+      skill_level:         $("#profile_skill-level").val(),
+      gender:              $("#profile_gender").val(),
+      marital_status:      $("#profile_marital-status").val(),
+      year_started:        $("#profile_year-started").val(),
+      gamble:              $("#profile_gamble").val(),
+      driver_model:        $("#profile_driver-model").val(),
+      fairway_woods_model: $("#profile_fairway-woods-model").val(),
+      hybrids_model:       $("#profile_hybrids-model").val(),
+      irons_model:         $("#profile_irons-model").val(),
+      wedges_model:        $("#profile_wedges-model").val(),
+      putter_model:        $("#profile_putter-model").val(),
+      golf_ball_model:     $("#profile_golf-ball-model").val(),
+      shoe_brand:          $("#profile_shoe-brand").val()
     });
-    console.log("2");
-    console.log(currentUser);
-    console.log("3");
     new ProfileView({ el: $("#profile_holder"), user: currentUser });
     new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
   }

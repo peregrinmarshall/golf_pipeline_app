@@ -188,8 +188,28 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#profile-editor_template").html(), { user: this.options.user } );
-      this.$el.html( template ).trigger('create');
+      for (var i=0; i < selections.length; i++) {
+        key = selections[i];
+        if (typeof this.options.user.attributes[key] != "undefined")
+          window[key] = this.options.user.attributes[key]
+        else if (typeof this.options.user.attributes.profile[key])
+          window[key] = this.options.user.attributes.profile[key]
+        else
+          window[key] = this.options.user.get("profile")[key];
+      }
+
+      var template = _.template( $("#profile-editor_template").html(), {
+        user:        this.options.user
+      });
+
+      $("#profile-editor_holder").html(template).find("select").each( function()
+      {
+        longId  = $(this).attr("id");
+        shortId = longId.split("_")[1];
+        id      = shortId.replace("-", "_");   
+        $(this).val(window[id]);
+      });
+      $("#profile-editor_holder").trigger('create');
     }
   });
 });
