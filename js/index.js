@@ -136,10 +136,10 @@ function bookTime()
     }
     else
     {
-      $("#page_upcoming_golf .alerts").html("Your time has been booked.").show();
+      $("#page_upcoming-golf .alerts").html("Your time has been booked.").show();
       tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
       new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
-      $.mobile.changePage($('#page_upcoming_golf'));
+      $.mobile.changePage($('#page_upcoming-golf'));
     }
   }
 }
@@ -257,8 +257,6 @@ function updateProfile()
     new ProfileView({ el: $("#profile_holder"), user: currentUser });
     new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
   }
-  else
-    $("#edit-profile_errors").html("The requested change could not be made.");
 }
 
 google.maps.event.addDomListener(window, 'load', setup); 

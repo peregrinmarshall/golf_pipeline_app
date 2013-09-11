@@ -36,7 +36,7 @@ function connect(url, type, data, sendToken)
   }).fail( function(c) {
     $("#loading").hide();
     if (c.status != "401")
-      alert("There was an error connecting to the API.  Please try again.");
+      alert("Please review your input and try again.");
   });
 
   return response;
