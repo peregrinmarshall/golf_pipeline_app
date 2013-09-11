@@ -1,5 +1,5 @@
 var remote_url = "http://www.golfpipelinedemo.com";
-var remote_url = "http://localhost:3000";
+//var remote_url = "http://localhost:3000";
 
 var do_validate = true;
 var token       = false;
@@ -60,14 +60,14 @@ function onDeviceReady()
   $(document).on("click", ".course_link", function()
   {
     slug = $(this).attr("id").replace("course_link_", "");
-    data = {};
-    apiResponse = connect("/courses/" + slug + ".json", "get", data, true);
-    $("#course_details").html("<h2>" + apiResponse.label + "</h2>Latitude: " + apiResponse.lat + "<br />Longitude: " + apiResponse.lon);
+    r = connect("/courses/" + slug + ".json", "get", data, true);
+    course = new Course(r);
+    new CourseView({ el: $("#course_holder"), course: course });
+    //$("#course_details").html("<h2>" + apiResponse.label + "</h2>Latitude: " + apiResponse.lat + "<br />Longitude: " + apiResponse.lon);
   });
 
   $(document).on("click", "#payment_builder", function()
   {
-    console.log(slots[tt_id]);
     new PaymentView({ el: $("#payment_holder"), user: currentUser, slot: slots[tt_id] });
   });
 
@@ -83,11 +83,6 @@ function searchTimes()
     "date":         $("#search-times_date").val(),
     "time":         $("#search-times_time").val(),
     "golfer_count": $("#search-times_golfer-count").val()
-    //"location":     "80211",
-    //"distance":     "1234",
-    //"date":         "24 August, 2013",
-    //"time":         "2:00 PM",
-    //"golfer_count": "4"
   }};
 
   if (!$("#search-times_form").valid() && do_validate)
@@ -98,7 +93,6 @@ function searchTimes()
   if (apiResponse)
   {
     timeResults = new TimeResults(apiResponse);
-    console.log(timeResults);
     new TimeResultsView({ el: $("#results_times"), time_results: timeResults });
     $.mobile.changePage($('#page_result-times'));
   }
@@ -109,7 +103,6 @@ function searchTimes()
 function bookTime()
 {
   formattedTeeTime = new Date(slots[tt_id].tee_time);
-  console.log(formattedTeeTime);
   data = {
     "search_tee_time"  : {
       "first_name"     : $("#payment_first-name").val(),
@@ -153,20 +146,16 @@ function bookTime()
 
 function searchCourses()
 {
-  center = "80211";//$("#search-courses_location").val();
-  distance = "1000";//$("#search-courses_distance").val();
+  center = $("#search-courses_location").val();
+  distance = $("#search-courses_distance").val();
   data = { "mobile_course": { "location" : center, "distance": distance } };
   url = "/courses/search.json";
   apiResponse = connect(url, "get", data, true);
   if (apiResponse)
   {
-    collection = new Courses(apiResponse);
+    courses = new Courses(apiResponse);
+    new CoursesView({ el: $("#courses_holder"), courses: courses });
     $.mobile.changePage($('#page_result-courses'));
-    $("#results_courses").html("");
-    $.each(apiResponse, function(i, val)
-    {
-      $("#results_courses").append('<li><a href="#page_course" class="course_link" id="course_link_' + val.slug + '">'+ val.label + '</a>)</li>');
-    });
   }
   else
     alert("There was an error.");
@@ -245,8 +234,6 @@ function updateProfile()
   if (apiResponse)
   {
     $.mobile.changePage($('#page_home'));
-    console.log("1");
-    console.log(currentUser);
     currentUser.set({
       first_name:          $("#profile_first_name").val(),
       last_name:           $("#profile_last_name").val(),

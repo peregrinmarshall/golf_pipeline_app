@@ -201,9 +201,8 @@
     <div data-role="page" id="page_result-courses">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        These are courses that match the search.
-        <ul id="results_courses">
-        </ul>
+        <div id="courses_holder">
+        </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -211,8 +210,8 @@
     <div data-role="page" id="page_course">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        This is the course show page.<br /><br />
-        <div id="course_details"><i>The details could not be loaded.</i></div>
+        <div id="course_holder">
+        </div>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -366,6 +365,36 @@
   <a href="#page_payment"><button id="payment_builder">Next</button></a>
 </script>
 
+<script type="text/template" id="course_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Course Details
+  </div>
+  <h3><%- course.get("label") %></h3>
+  <div class="ratings">
+    <div class="user_ratings">
+      User Rating:
+      <% if (!course.get("user_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("user_rating");i++) { %>
+        <img src="./img/star.png" />
+      <% } %>
+    </div>
+    <div class="critic_ratings">
+      Critic Rating:
+      <% if (!course.get("critic_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("critic_rating");i++) { %>
+        <img src="./img/diamond.png" />
+      <% } %>
+    </div>
+  </div>
+  <br /><br />
+  <%- course.get("address") %>
+  <div id="map"></div>
+</script>
+
 <script type="text/template" id="payment_template">
   <div class="ui-bar ui-bar-b gp_header">
     Payment Details
@@ -413,6 +442,26 @@
   <% } else { %>
     <br />
     <i>You have no activities.</i>
+  <% } %>
+</script>
+
+<script type="text/template" id="courses_template">
+  <div class="ui-bar ui-bar-b gp_header">
+    Courses
+  </div>
+  <% if (courses.length > 0) { %>
+    <% courses.each(function(course) { %>
+      <br />
+      <a href="#page_course" class="course_link" id="course_link_<%- course.get("slug") %>">
+        <div class="ui-bar ui-bar-a gp_header">
+          <h3><%- course.get("label") %></h3>
+          <%- course.get("address") %>
+        </div>
+      </a>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>No courses were found.</i>
   <% } %>
 </script>
 

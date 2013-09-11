@@ -128,6 +128,32 @@ $(document).ready( function()
     }
   });
 
+  CoursesView = Backbone.View.extend(
+  {
+    initialize: function(options)
+    {
+      this.render();
+    },
+    render: function()
+    {
+      var template = _.template( $("#courses_template").html(), { courses: this.options.courses } );
+      this.$el.html( template );
+    }
+  });
+
+  CourseView = Backbone.View.extend(
+  {
+    initialize: function(options)
+    {
+      this.render();
+    },
+    render: function()
+    {
+      var template = _.template( $("#course_template").html(), { course: this.options.course } );
+      this.$el.html( template );
+    }
+  });
+
   TimeView = Backbone.View.extend(
   {
     initialize: function(options)
