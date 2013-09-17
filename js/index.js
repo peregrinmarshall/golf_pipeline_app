@@ -35,7 +35,7 @@ function onDeviceReady()
   $("#search-times_form").validate();
   $("#search-courses_form").submit( function(e) { searchCourses(); return false; });
   $("#search-courses_form").validate();
-  $(document).on("submit", "#payment_form", function(e) { bookTime(); return false; });
+  $(document).submit( function(e) { bookTime(); return false; });
   $("#payment_form").validate();
 
   $('input[type=submit]').buttonMarkup({ corners: false });

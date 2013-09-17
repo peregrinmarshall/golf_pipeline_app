@@ -247,8 +247,13 @@
     <div data-role="page" id="page_payment">
       <div data-role="header" data-position="fixed" class="header" data-id="moving_target"></div>
       <div data-role="content">
-        <div id="payment_holder">
+        <div class="ui-bar ui-bar-b gp_header">
+          Payment Details
         </div>
+        <form action="" id="payment_form" method="get" data-ajax="false">
+          <div id="payment_holder">
+          </div>
+        </form>
       </div>
       <div data-role="footer" data-position="fixed" class="footer" data-id="social_bar"></div>
     </div>
@@ -396,10 +401,6 @@
 </script>
 
 <script type="text/template" id="payment_template">
-  <div class="ui-bar ui-bar-b gp_header">
-    Payment Details
-  </div>
-  <form action="#page_result-payment" id="payment_form" method="get">
     <input type="text" name="center" id="payment_first-name" class="required" minlength="3" placeholder="First Name" value="<%- user.get('first_name') %>" />
     <input type="text" name="center" id="payment_last-name" class="required" minlength="3" placeholder="Last Name" value="<%- user.get('last_name') %>" />
     <input type="text" name="center" id="payment_email" class="required" minlength="3" placeholder="Email" value="<%- user.get('email') %>" />
@@ -408,7 +409,6 @@
     <input type="text" name="center" id="payment_month" class="required" minlength="3" placeholder="Exp. Month" />
     <input type="text" name="center" id="payment_year" class="required" minlength="3" placeholder="Exp. Year" />
     <input type="submit" value="Book It" />
-  </form>
 </script>
 
 <script type="text/template" id="notifications_template">
@@ -576,7 +576,7 @@
     <select id="profile_gender" name="gender"><option value="">--Gender--</option><option value="male">Male</option><option value="female">Female</option></select>
     <select id="profile_skill-level" name="skill-level"><option value="">--Skill Level--</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option><option value="professional">Professional</option></select>
     <select id="profile_marital-status" name="marital_status"><option value="">--Marital Status--</option><option value="single">Single</option><option value="married">Married</option><option value="divorced">Divorced</option><option value="widowed">Widowed</option></select>
-    <select id="profile_year-started" name="year_started">
+    <select id="profile_year-started" name="year_started" class="required">
       <option value="">--Year Started--</option>
       <% for (var i=2013;i>1913;i--) { %>
         <option value="<%- i %>"><%- i %></option>
