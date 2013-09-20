@@ -97,8 +97,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#time-results_template").html(), { time_results: this.options.time_results } );
-      this.$el.html( template );
+      t = renderTemplate('time_results', { time_results: this.options.time_results } );
+      $("#results_times").html(t).trigger("create");
     }
   });
 
@@ -110,8 +110,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#notifications_template").html(), { notifications: this.options.notifications } );
-      this.$el.html( template );
+      t = renderTemplate('notifications', { notifications: this.options.notifications } );
+      $("#notifications_holder").html(t).trigger("create");
     }
   });
 
@@ -123,8 +123,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#activities_template").html(), { activities: this.options.activities } );
-      this.$el.html( template );
+      t = renderTemplate('activities', { activities: this.options.activities } );
+      $("#activities_holder").html(t).trigger("create");
     }
   });
 
@@ -136,8 +136,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#courses_template").html(), { courses: this.options.courses } );
-      this.$el.html( template );
+      t = renderTemplate('courses', { courses: this.options.courses } );
+      $("#courses_holder").html(t).trigger("create");
     }
   });
 
@@ -149,8 +149,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#course_template").html(), { course: this.options.course } );
-      this.$el.html( template );
+      t = renderTemplate('course', { course: this.options.course } );
+      $("#course_holder").html(t).trigger("create");
     }
   });
 
@@ -162,8 +162,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#time_template").html(), { course: this.options.course } );
-      this.$el.html( template );
+      t = renderTemplate('time', { course: this.options.course } );
+      $("#tee_holder").html(t).trigger("create");
     }
   });
 
@@ -175,8 +175,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#tee-times_template").html(), { tee_times: this.options.tee_times } );
-      this.$el.html( template );
+      t = renderTemplate('tee_times', { tee_times: this.options.tee_times } );
+      $("#tee-times_holder").html(t).trigger("create");
     }
   });
 
@@ -188,8 +188,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#payment_template").html(), { user: this.options.user, slot: this.options.slot } );
-      this.$el.html( template );
+      t = renderTemplate('payment', { user: this.options.user, slot: this.options.slot } );
+      $("#payment_holder").html(t).trigger("create");
     }
   });
 
@@ -201,8 +201,8 @@ $(document).ready( function()
     },
     render: function()
     {
-      var template = _.template( $("#profile_template").html(), { user: this.options.user } );
-      this.$el.html( template ).trigger('create');
+      t = renderTemplate('profile', { user: this.options.user });
+      $("#profile_holder").html(t).trigger("create");
     }
   });
 
@@ -224,11 +224,9 @@ $(document).ready( function()
           window[key] = this.options.user.get("profile")[key];
       }
 
-      var template = _.template( $("#profile-editor_template").html(), {
-        user:        this.options.user
-      });
+      t = renderTemplate('profile_editor', { user: this.options.user });
 
-      $("#profile-editor_holder").html(template).find("select").each( function()
+      $("#profile-editor_holder").html(t).find("select").each( function()
       {
         longId  = $(this).attr("id");
         shortId = longId.split("_")[1];

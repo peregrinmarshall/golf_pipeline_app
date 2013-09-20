@@ -1,0 +1,27 @@
+  <div class="ui-bar ui-bar-b gp_header">
+    Course Details
+  </div>
+  <h3><%- course.get("label") %></h3>
+  <div class="ratings">
+    <div class="user_ratings">
+      User Rating:
+      <% if (!course.get("user_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("user_rating");i++) { %>
+        <img src="./img/star.png" />
+      <% } %>
+    </div>
+    <div class="critic_ratings">
+      Critic Rating:
+      <% if (!course.get("critic_rating")) { %>
+        <i>not available</i>
+      <% } %>
+      <% for (var i=0;i<course.get("critic_rating");i++) { %>
+        <img src="./img/diamond.png" />
+      <% } %>
+    </div>
+  </div>
+  <br /><br />
+  <%- course.get("address") %>
+  <div id="map"></div>

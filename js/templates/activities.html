@@ -1,0 +1,14 @@
+  <div class="ui-bar ui-bar-b gp_header">
+    Activities
+  </div>
+  <% if (activities.length > 0) { %>
+    <% activities.each(function(activity) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header">
+        <%- activity.get("text") %>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no activities.</i>
+  <% } %>

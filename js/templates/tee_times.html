@@ -1,0 +1,13 @@
+  <% if (tee_times.length > 0) { %>
+    <% tee_times.each(function(tee_time) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header" class="upcoming_golf_block">
+        <%- tee_time.get("pretty_time") %><br />
+        <%- tee_time.get("course_name") %><br />
+        <%- tee_time.get("holes") %> Holes | <%- tee_time.get("rate") %> Per Player
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no upcoming golf.</i>
+  <% } %>

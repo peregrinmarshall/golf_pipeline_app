@@ -1,6 +1,22 @@
 var remote_url = "http://www.golfpipelinedemo.com";
 //var remote_url = "http://localhost:3000";
 
+function renderTemplate(name, json)
+{
+  tmpl = "";
+  var url = 'js/templates/' + name + '.html';
+  $.ajax({
+    url: url,
+    method: 'GET',
+    async: false,
+    dataType: 'html',
+    success: function(data) {
+      tmpl = _.template(data, json);
+    }
+  });
+  return tmpl;
+}
+
 var do_validate = true;
 var token       = false;
 var map         = false;
@@ -53,7 +69,7 @@ function onDeviceReady()
     window.localStorage.setItem("book_id", tt_id);
     r = connect("/courses/" + c_id + ".json", "get", data, true);
     course = new Course(r);
-    new TimeView({ el: $("#tee_holder"), course: course });
+    new TimeView({ course: course });
     mapCoords(course.get("lat"), course.get("lon"));
   });
 
@@ -62,13 +78,13 @@ function onDeviceReady()
     slug = $(this).attr("id").replace("course_link_", "");
     r = connect("/courses/" + slug + ".json", "get", data, true);
     course = new Course(r);
-    new CourseView({ el: $("#course_holder"), course: course });
+    new CourseView({ course: course });
     //$("#course_details").html("<h2>" + apiResponse.label + "</h2>Latitude: " + apiResponse.lat + "<br />Longitude: " + apiResponse.lon);
   });
 
   $(document).on("click", "#payment_builder", function()
   {
-    new PaymentView({ el: $("#payment_holder"), user: currentUser, slot: slots[tt_id] });
+    new PaymentView({ user: currentUser, slot: slots[tt_id] });
   });
 
   $(".datepicker").pickadate();
@@ -93,7 +109,7 @@ function searchTimes()
   if (apiResponse)
   {
     timeResults = new TimeResults(apiResponse);
-    new TimeResultsView({ el: $("#results_times"), time_results: timeResults });
+    new TimeResultsView({ time_results: timeResults });
     $.mobile.changePage($('#page_result-times'));
   }
   else
@@ -138,7 +154,7 @@ function bookTime()
     {
       $("#page_upcoming-golf .alerts").html("Your time has been booked.").show();
       tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
-      new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
+      new TeeTimesView({ tee_times: tee_times });
       $.mobile.changePage($('#page_upcoming-golf'));
     }
   }
@@ -154,7 +170,7 @@ function searchCourses()
   if (apiResponse)
   {
     courses = new Courses(apiResponse);
-    new CoursesView({ el: $("#courses_holder"), courses: courses });
+    new CoursesView({ courses: courses });
     $.mobile.changePage($('#page_result-courses'));
   }
   else
@@ -178,8 +194,8 @@ function login()
   {
     currentUser = new User(apiResponse);
     window.localStorage.setItem("token", currentUser.attributes.authentication_token);
-    new ProfileView({ el: $("#profile_holder"), user: currentUser });
-    new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
+    new ProfileView({ user: currentUser });
+    new ProfileEditorView({ user: currentUser });
     $.mobile.changePage($('#page_home'));
     thumbURL = window.localStorage.getItem("remote_url") + currentUser.get("image_thumb");
     imageURL = window.localStorage.getItem("remote_url") + currentUser.get("image_url");
@@ -191,14 +207,14 @@ function login()
     $(".notification_count").html(notifications.length);
     if (notifications.length == 1)
       $(".notification_plural").hide();
-    new NotificationsView({ el: $("#notifications_holder"), notifications: notifications });
+    new NotificationsView({ notifications: notifications });
 
     activities = new Activities(connect("/profile/friend_activity.json", "get", data, true));
     $(".activity_count").html(activities.length);
-    new ActivitiesView({ el: $("#activities_holder"), activities: activities });
+    new ActivitiesView({ activities: activities });
 
     tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
-    new TeeTimesView({ el: $("#tee-times_holder"), tee_times: tee_times });
+    new TeeTimesView({ tee_times: tee_times });
   }
   else
     $("#login_errors").html("Your username and/or password were incorrect.");
@@ -254,8 +270,8 @@ function updateProfile()
       golf_ball_model:     $("#profile_golf-ball-model").val(),
       shoe_brand:          $("#profile_shoe-brand").val()
     });
-    new ProfileView({ el: $("#profile_holder"), user: currentUser });
-    new ProfileEditorView({ el: $("#profile-editor_holder"), user: currentUser });
+    new ProfileView({ user: currentUser });
+    new ProfileEditorView({ user: currentUser });
   }
 }
 

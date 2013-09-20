@@ -1,0 +1,14 @@
+  <div class="ui-bar ui-bar-b gp_header">
+    Notifications
+  </div>
+  <% if (notifications.length > 0) { %>
+    <% notifications.each(function(notification) { %>
+      <br />
+      <div class="ui-bar ui-bar-a gp_header">
+        <%- notification.get("message") %>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <br />
+    <i>You have no notifications.</i>
+  <% } %>
