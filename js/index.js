@@ -25,7 +25,7 @@ window.localStorage.setItem("remote_url", remote_url);
 
 function onDeviceReady()
 {
-  $("#login_form").validate();
+
   $("#login_form").submit( function(e) { login(); return false; });
   $("#update-profile_form").submit( function(e) { updateProfile(); return false; });
   $("#update-profile_form").validate();
