@@ -13,18 +13,24 @@ $(document).ready( function()
   {
     startingPageName = $(this).attr("id").split("_")[1];
     key = pageArray.indexOf(startingPageName);
-    targetPageName = pageArray[key+1];
-    if ($("#page_" + targetPageName).length > 0)
-      $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: false}, true, true);
+    if (key != -1)
+    {
+      targetPageName = pageArray[key+1];
+      if ($("#page_" + targetPageName).length > 0)
+        $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: false}, true, true);
+    }
   });
 
   $("div[data-role=page]").on('swiperight', function(event)
   {
     startingPageName = $(this).attr("id").split("_")[1];
     key = pageArray.indexOf(startingPageName);
-    targetPageName = pageArray[key-1];
-    if ($("#page_" + targetPageName).length > 0)
-      $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: true}, true, true);
+    if (key != -1)
+    {
+      targetPageName = pageArray[key-1];
+      if ($("#page_" + targetPageName).length > 0)
+        $.mobile.changePage($("#page_" + targetPageName), {transition: "slide", reverse: true}, true, true);
+    }
   });
 
 });

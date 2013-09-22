@@ -179,7 +179,7 @@ function searchCourses()
 
 function login()
 {
-  data = { user: {
+  data = { login: {
     login: $("#login_username").val(),
     password: $("#login_password").val()
   }};
@@ -192,8 +192,10 @@ function login()
 
   if (apiResponse)
   {
+    window.localStorage.setItem("token", apiResponse.authentication_token);
+    url = "/profile.json"
+    apiResponse = connect(url, "get", {}, true);
     currentUser = new User(apiResponse);
-    window.localStorage.setItem("token", currentUser.attributes.authentication_token);
     new ProfileView({ user: currentUser });
     new ProfileEditorView({ user: currentUser });
     $.mobile.changePage($('#page_home'));
@@ -203,17 +205,17 @@ function login()
     $("#profile_button .ui-btn-inner").css("background-image", "url(" + thumbURL + ")");
     data = "";
 
-    notifications = new Notifications(connect("/notifications.json", "get", data, true));
+    notifications = new Notifications(connect("/notifications.json", "get", {}, true));
     $(".notification_count").html(notifications.length);
     if (notifications.length == 1)
       $(".notification_plural").hide();
     new NotificationsView({ notifications: notifications });
 
-    activities = new Activities(connect("/profile/friend_activity.json", "get", data, true));
+    activities = new Activities(connect("/profile/friend_activity.json", "get", {}, true));
     $(".activity_count").html(activities.length);
     new ActivitiesView({ activities: activities });
 
-    tee_times = new TeeTimes(connect("/tee_times.json", "get", data, true));
+    tee_times = new TeeTimes(connect("/tee_times.json", "get", {}, true));
     new TeeTimesView({ tee_times: tee_times });
   }
   else
