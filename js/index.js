@@ -1,6 +1,9 @@
 var remote_url = "http://www.golfpipelinedemo.com";
 //var remote_url = "http://localhost:3000";
 
+var latitude = false;
+var longitude = false;
+
 function renderTemplate(name, json)
 {
   tmpl = "";
@@ -39,9 +42,39 @@ var selections  = [
 document.addEventListener("deviceready", onDeviceReady, false);
 window.localStorage.setItem("remote_url", remote_url);
 
+function extractFromAddress(components, type)
+{
+  for (var i=0; i<components.length; i++)
+    for (var j=0; j<components[i].types.length; j++)
+      if (components[i].types[j]==type) return components[i].long_name;
+  return "";
+}
+
+function setCurrentLocation(target)
+{
+  gURL  = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+  gURL += latitude;
+  gURL += ",";
+  gURL += longitude;
+  gURL += "&sensor=true";
+  $.ajax({
+      dataType: "json",
+      url: gURL,
+      success: function(response) {
+        console.log(response);
+        if (response.results[0]  && response.results[0].address_components)
+          zip = extractFromAddress(response.results[0].address_components, "postal_code");
+        else
+          alert("Your location could not be identified.");
+        $(target).val(zip);
+      }
+  });
+}
+
 function onDeviceReady()
 {
 
+  navigator.geolocation.getCurrentPosition(locationSuccess, locationError);
   $("#login_form").submit( function(e) { login(); return false; });
   $("#update-profile_form").submit( function(e) { updateProfile(); return false; });
   $("#update-profile_form").validate();
@@ -58,6 +91,16 @@ function onDeviceReady()
 
   $(".mini_logo").click( function() {
     $(".nav_strip ul").css("left", "-35%");
+  });
+
+  $(document).on("click", "#use-current_courses", function()
+  {
+    setCurrentLocation("#search-courses_location");
+  });
+
+  $(document).on("click", "#use-current_times", function()
+  {
+    setCurrentLocation("#search-times_location");
   });
 
   $(document).on("click", ".tee_link", function()
@@ -92,6 +135,17 @@ function onDeviceReady()
 
   $(".datepicker").pickadate();
   $(".timepicker").pickatime();
+}
+
+function locationSuccess(position)
+{
+  latitude  = position.coords.latitude;
+  longitude = position.coords.longitude;
+}
+
+function locationError()
+{
+  alert("Your location could not be found.");
 }
 
 function searchTimes()
@@ -214,6 +268,9 @@ function login(from_memory)
     url = "/profile.json"
     apiResponse = connect(url, "get", {}, true);
     currentUser = new User(apiResponse);
+    console.log(currentUser);
+    $("#search-courses_location").val(currentUser.attributes.zip_code);
+    $("#search-times_location").val(currentUser.attributes.zip_code);
     new ProfileView({ user: currentUser });
     new ProfileEditorView({ user: currentUser });
     $.mobile.changePage($('#page_home'));

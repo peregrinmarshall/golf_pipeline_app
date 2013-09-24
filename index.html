@@ -142,6 +142,7 @@
         </div>
         <form action="#page_result-courses" id="search-courses_form" method="get">
           <input type="text" name="center" id="search-courses_location" class="required" minlength="3" placeholder="Location" />
+          <input type="checkbox" id="use-current_courses" /> Use current location.
           <select name="distance" id="search-courses_distance" class="required" placeholder="Distance">
             <option value="10">10 miles</option>
             <option value="25">25 miles</option>
@@ -166,6 +167,7 @@
         <div class="errors hidden"></div>
         <form action="#page_result-times" id="search-times_form" method="get">
           <input type="text" name="center" id="search-times_location" class="required" minlength="3" placeholder="Location" />
+          <input type="checkbox" id="use-current_times" /> Use current location.
           <select name="distance" id="search-times_distance" class="required" placeholder="Distance">
             <option value="10">10 miles</option>
             <option value="25">25 miles</option>
