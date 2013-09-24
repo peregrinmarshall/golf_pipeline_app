@@ -87,6 +87,9 @@ function onDeviceReady()
     new PaymentView({ user: currentUser, slot: slots[tt_id] });
   });
 
+  if (window.localStorage.getItem("is_memorable"))
+    login(true);
+
   $(".datepicker").pickadate();
   $(".timepicker").pickatime();
 }
@@ -177,22 +180,37 @@ function searchCourses()
     alert("There was an error.");
 }
 
-function login()
+function login(from_memory)
 {
-  data = { login: {
-    login: $("#login_username").val(),
-    password: $("#login_password").val()
-  }};
+  from_memory = typeof from_memory !== 'undefined' ? from_memory : false;
 
-  if (!$("#login_form").valid() && do_validate)
-    return false;
-
-  url = "/users/sign_in.json"
-  apiResponse = connect(url, "post", data, false);
-
-  if (apiResponse)
+  if (from_memory)
   {
-    window.localStorage.setItem("token", apiResponse.authentication_token);
+    apiResponse = false;
+  }
+  else
+  {
+    data = { login: {
+      login: $("#login_username").val(),
+      password: $("#login_password").val()
+    }};
+
+    if (!$("#login_form").valid() && do_validate)
+      return false;
+
+    url = "/users/sign_in.json"
+    apiResponse = connect(url, "post", data, false);
+  }
+
+  if (apiResponse || from_memory)
+  {
+    if ($("#is_memorable").is(":checked") || from_memory)
+      window.localStorage.setItem("is_memorable", true);
+    else
+    {
+      window.localStorage.setItem("is_memorable", false);
+      window.localStorage.setItem("token", apiResponse.authentication_token);
+    }
     url = "/profile.json"
     apiResponse = connect(url, "get", {}, true);
     currentUser = new User(apiResponse);
